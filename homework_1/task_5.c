@@ -3,40 +3,40 @@
 
 void createSpiral(int size, int** matrix)
 {
-    int centre_i = size / 2, centre_j = size / 2;
+    int centreI = size / 2, centreJ = size / 2;
     int number = 1;
-    matrix[centre_i][centre_j] = number;
+    matrix[centreI][centreJ] = number;
 
     for (int i = 1; i < size; ++i) {
         if (i % 2 != 0) {
             for (int k = 0; k < i; ++k) {
                 ++number;
-                ++centre_j;
-                matrix[centre_i][centre_j] = number;
+                ++centreJ;
+                matrix[centreI][centreJ] = number;
             }
             for (int k = 0; k < i; ++k) {
                 ++number;
-                ++centre_i;
-                matrix[centre_i][centre_j] = number;
+                ++centreI;
+                matrix[centreI][centreJ] = number;
             }
         } else {
             for (int k = 0; k < i; ++k) {
                 ++number;
-                --centre_j;
-                matrix[centre_i][centre_j] = number;
+                --centreJ;
+                matrix[centreI][centreJ] = number;
             }
             for (int k = 0; k < i; ++k) {
                 ++number;
-                --centre_i;
-                matrix[centre_i][centre_j] = number;
+                --centreI;
+                matrix[centreI][centreJ] = number;
             }
         }
     }
 
     for (int j = 1; j < size; ++j) {
         ++number;
-        ++centre_j;
-        matrix[centre_i][centre_j] = number;
+        ++centreJ;
+        matrix[centreI][centreJ] = number;
     }
 }
 
