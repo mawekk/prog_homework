@@ -3,14 +3,14 @@
 
 int calculateIncompleteQuotient(int dividend, int divisor)
 {
-    int abs_dividend, abs_divisor;
+    int absDividend, absDivisor;
     int quotient = 0;
 
-    abs_dividend = abs(dividend);
-    abs_divisor = abs(divisor);
+    absDividend = abs(dividend);
+    absDivisor = abs(divisor);
 
-    while (abs_dividend >= abs_divisor) {
-        abs_dividend = abs_dividend - abs_divisor;
+    while (absDividend >= absDivisor) {
+        absDividend = absDividend - absDivisor;
         ++quotient;
     }
 
