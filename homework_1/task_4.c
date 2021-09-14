@@ -4,8 +4,7 @@
 int numberIsPrime(int number)
 {
     int flag = 1;
-    int sqrt_number = sqrt(number);
-    for (int divisor = 2; divisor <= sqrt_number; ++divisor) {
+    for (int divisor = 2; divisor <= sqrt(number); ++divisor) {
         if (number % divisor == 0) {
             flag = 0;
             break;
@@ -18,7 +17,7 @@ int numberIsPrime(int number)
 int main()
 {
     int number;
-    int less_number = 2;
+    int lessNumber = 2;
     printf("Enter the number:\n");
     scanf("%d", &number);
 
@@ -26,10 +25,10 @@ int main()
         printf("There are no such primes");
     else {
         printf("The primes not exceeding %d:\n", number);
-        while (less_number <= number) {
-            if (numberIsPrime(less_number))
-                printf("%d\n", less_number);
-            ++less_number;
+        while (lessNumber <= number) {
+            if (numberIsPrime(lessNumber))
+                printf("%d\n", lessNumber);
+            ++lessNumber;
         }
     }
 
