@@ -3,27 +3,27 @@
 
 int searchForTheMax(int size, int* array)
 {
-    int max = array[0], count = 0, position = 0, curr_size = size;
+    int max = array[0], count = 0, position = 0, currSize = size;
 
     while (count <= 1) {
-        for (int i = 0; i < curr_size; ++i) {
+        for (int i = 0; i < currSize; ++i) {
             if (array[i] > max) {
                 max = array[i];
                 position = i;
             }
         }
-        for (int i = 0; i < curr_size; ++i)
+        for (int i = 0; i < currSize; ++i)
             if (array[i] == max) {
                 ++count;
             }
         if (count == 1) {
-            for (int i = position; i < curr_size - 1; ++i)
+            for (int i = position; i < currSize - 1; ++i)
                 array[i] = array[i + 1];
             count = 0;
-            curr_size = curr_size - 1;
+            currSize = currSize - 1;
             max = array[0];
         }
-        if (curr_size == 1) {
+        if (currSize == 1) {
             printf("There are not such maximum!");
             exit(0);
         }
