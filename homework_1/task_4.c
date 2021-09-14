@@ -4,7 +4,8 @@
 int numberIsPrime(int number)
 {
     int flag = 1;
-    for (int divisor = 2; divisor <= sqrt(number); ++divisor) {
+    int sqrt_number = sqrt(number);
+    for (int divisor = 2; divisor <= sqrt_number; ++divisor) {
         if (number % divisor == 0) {
             flag = 0;
             break;
