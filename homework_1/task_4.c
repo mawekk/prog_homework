@@ -1,7 +1,7 @@
 #include <math.h>
 #include <stdio.h>
 
-int numberIsPrime(number)
+int numberIsPrime(int number)
 {
     int flag = 1;
     for (int divisor = 2; divisor <= sqrt(number); ++divisor) {
