@@ -42,23 +42,23 @@ void createSpiral(int size, int** matrix)
 
 int main()
 {
-    int n;
-    printf("Enter odd n:\n");
-    scanf("%d", &n);
-    while (n % 2 == 0) {
-        printf("Error! Enter odd n:\n");
-        scanf("%d", &n);
+    int number;
+    printf("Enter odd number:\n");
+    scanf("%d", &number);
+    while (number % 2 == 0) {
+        printf("Error: this number is even! Enter odd number:\n");
+        scanf("%d", &number);
     }
 
-    int** matrix = calloc(n, sizeof(int*));
-    for (int i = 0; i < n; ++i)
-        matrix[i] = calloc(n, sizeof(int));
+    int** matrix = calloc(number, sizeof(int*));
+    for (int i = 0; i < number; ++i)
+        matrix[i] = calloc(number, sizeof(int));
 
-    createSpiral(n, matrix);
+    createSpiral(number, matrix);
 
-    printf("A spiral of numbers from 1 to %d:\n", n * n);
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j)
+    printf("A spiral of numbers from 1 to %d:\n", number * number);
+    for (int i = 0; i < number; ++i) {
+        for (int j = 0; j < number; ++j)
             printf("%3d ", matrix[i][j]);
         printf("\n");
     }
