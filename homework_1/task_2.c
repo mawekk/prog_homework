@@ -34,12 +34,11 @@ int searchForTheMax(int size, int* array)
 
 int main()
 {
-    int size;
+    int size = 0;
     printf("Enter the size of the array:\n");
     scanf("%d", &size);
 
-    int* array;
-    array = calloc(size, sizeof(int));
+    int* array = calloc(size, sizeof(int));
     printf("Enter the array elements:\n");
     for (int i = 0; i < size; ++i)
         scanf("%d", &array[i]);
