@@ -16,7 +16,7 @@ int numberIsPrime(int number)
 
 int main()
 {
-    int number;
+    int number = 0;
     int lessNumber = 2;
     printf("Enter the number:\n");
     scanf("%d", &number);
