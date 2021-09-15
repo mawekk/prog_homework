@@ -3,11 +3,8 @@
 
 int calculateIncompleteQuotient(int dividend, int divisor)
 {
-    int absDividend, absDivisor;
+    int absDividend = abs(dividend), absDivisor = abs(divisor);
     int quotient = 0;
-
-    absDividend = abs(dividend);
-    absDivisor = abs(divisor);
 
     while (absDividend >= absDivisor) {
         absDividend = absDividend - absDivisor;
@@ -24,14 +21,14 @@ int calculateIncompleteQuotient(int dividend, int divisor)
 
 int main()
 {
-    int a, b;
-    printf("Enter a:\n");
-    scanf("%d", &a);
-    printf("Enter b:\n");
-    scanf("%d", &b);
-    while (!b) {
-        printf("Error! Enter b:\n");
-        scanf("%d", &b);
+    int dividend = 0, divisor = 0;
+    printf("Enter the dividend:\n");
+    scanf("%d", &dividend);
+    printf("Enter the divisor:\n");
+    scanf("%d", &divisor);
+    while (divisor == 0) {
+        printf("Error: division by zero! Enter the divisor again:\n");
+        scanf("%d", &divisor);
     }
-    printf("Answer = %i\n", calculateIncompleteQuotient(a, b));
+    printf("Answer = %i\n", calculateIncompleteQuotient(dividend, divisor));
 }
