@@ -42,7 +42,7 @@ void createSpiral(int size, int** matrix)
 
 int main()
 {
-    int number;
+    int number = 0;
     printf("Enter odd number:\n");
     scanf("%d", &number);
     while (number % 2 == 0) {
@@ -63,6 +63,8 @@ int main()
         printf("\n");
     }
 
+    for (int i = 0; i < number; ++i)
+        free(matrix[i]);
     free(matrix);
 
     return 0;
