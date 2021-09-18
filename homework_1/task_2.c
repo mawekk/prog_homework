@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int max = 0;
+
 int searchForTheMax(int size, int* array)
 {
-    int max = array[0], count = 0, position = 0, currSize = size;
+    int count = 0, position = 0, currSize = size;
+    max = array[0];
 
     while (count <= 1) {
         for (int i = 0; i < currSize; ++i) {
@@ -23,13 +26,11 @@ int searchForTheMax(int size, int* array)
             currSize = currSize - 1;
             max = array[0];
         }
-        if (currSize == 1) {
-            printf("There are not such maximum!");
-            exit(0);
-        }
+        if (currSize <= 1)
+            break;
     }
 
-    return max;
+    return currSize;
 }
 
 int main()
@@ -43,7 +44,11 @@ int main()
     for (int i = 0; i < size; ++i)
         scanf("%d", &array[i]);
 
-    printf("The maximum occurring more than 1 time: %d", searchForTheMax(size, array));
+    size = searchForTheMax(size, array);
+    if (size <= 1)
+        printf("There are not such maximum!");
+    else
+        printf("The maximum occurring more than 1 time: %d", max);
 
     free(array);
 
