@@ -1,41 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int max = 0;
-
 int searchForTheMax(int size, int* array)
 {
-    int count = 0, position = 0, currSize = size;
-    max = array[0];
+    int max = array[0], count = 0, position = -1;
 
-    while (count <= 1) {
-        for (int i = 0; i < currSize; ++i) {
-            if (array[i] > max) {
-                max = array[i];
-                position = i;
-            }
-        }
-        for (int i = 0; i < currSize; ++i)
-            if (array[i] == max) {
+    for (int i = 0; i < size; ++i) {
+        count = 0;
+        for (int k = 0; k < size; ++k) {
+            if (array[i] == array[k])
                 ++count;
-            }
-        if (count == 1) {
-            for (int i = position; i < currSize - 1; ++i)
-                array[i] = array[i + 1];
-            count = 0;
-            currSize = currSize - 1;
-            max = array[0];
         }
-        if (currSize <= 1)
-            break;
+        if (count > 1 && array[i] >= max) {
+            max = array[i];
+            position = i;
+        }
     }
 
-    return currSize;
+    return position;
 }
 
 int main()
 {
-    int size = 0;
+    int size = 0, position = 0;
     printf("Enter the size of the array:\n");
     scanf("%d", &size);
 
@@ -44,11 +31,11 @@ int main()
     for (int i = 0; i < size; ++i)
         scanf("%d", &array[i]);
 
-    size = searchForTheMax(size, array);
-    if (size <= 1)
+    position = searchForTheMax(size, array);
+    if (position == -1)
         printf("There are not such maximum!");
     else
-        printf("The maximum occurring more than 1 time: %d", max);
+        printf("The maximum occurring more than 1 time: %d", array[position]);
 
     free(array);
 
