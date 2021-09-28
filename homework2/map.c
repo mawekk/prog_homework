@@ -3,27 +3,27 @@
 #include <stdlib.h>
 
 struct LinkedMap {
-    MapElement *tail;
+    MapElement* tail;
     int mapSize;
 };
 
 struct MapElement {
-    const char *key;
+    const char* key;
     int value;
-    MapElement *prevElement;
+    MapElement* prevElement;
 };
 
-LinkedMap *makeNewMap()
+LinkedMap* makeNewMap()
 {
-    LinkedMap *map = malloc(sizeof(LinkedMap));
+    LinkedMap* map = malloc(sizeof(LinkedMap));
     map->tail = NULL;
     map->mapSize = 0;
     return map;
 }
 
-MapElement *makeNewMapElement(const char *key, int value, LinkedMap *map)
+MapElement* makeNewMapElement(const char* key, int value, LinkedMap* map)
 {
-    MapElement *newElement = malloc(sizeof(MapElement));
+    MapElement* newElement = malloc(sizeof(MapElement));
     newElement->key = key;
     newElement->value = value;
     newElement->prevElement = map->tail;
@@ -32,9 +32,9 @@ MapElement *makeNewMapElement(const char *key, int value, LinkedMap *map)
     return newElement;
 }
 
-bool hasKey(LinkedMap *map, const char *key)
+bool hasKey(LinkedMap* map, const char* key)
 {
-    MapElement *currElement = map->tail;
+    MapElement* currElement = map->tail;
     for (int i = 0; i < map->mapSize; ++i) {
         if (currElement->key == key)
             return true;
@@ -45,24 +45,23 @@ bool hasKey(LinkedMap *map, const char *key)
     return false;
 }
 
-void put(LinkedMap *map, const char *key, int value) {
+void put(LinkedMap* map, const char* key, int value)
+{
     if (hasKey(map, key)) {
-        MapElement *currElement = map->tail;
+        MapElement* currElement = map->tail;
         for (int i = 0; i < map->mapSize; ++i) {
             if (currElement->key == key) {
                 currElement->value = get(map, key) + value;
-            }
-            else
+            } else
                 currElement = currElement->prevElement;
         }
-    }
-    else
+    } else
         makeNewMapElement(key, value, map);
 }
 
-int get(LinkedMap *map, const char *key)
+int get(LinkedMap* map, const char* key)
 {
-    MapElement *currElement = map->tail;
+    MapElement* currElement = map->tail;
     for (int i = 0; i < map->mapSize; ++i) {
         if (currElement->key == key)
             return currElement->value;
@@ -71,9 +70,9 @@ int get(LinkedMap *map, const char *key)
     }
 }
 
-void printMap(LinkedMap *map)
+void printMap(LinkedMap* map)
 {
-    MapElement *currElement = map->tail;
+    MapElement* currElement = map->tail;
     for (int i = 0; i < map->mapSize; ++i) {
         printf("%s, %d\n", currElement->key, currElement->value);
         currElement = currElement->prevElement;
