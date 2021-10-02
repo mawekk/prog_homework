@@ -1,18 +1,40 @@
-#include "map.h"
+#include "../library/map.h"
 #include <stdio.h>
 
-int main(int argc, char* argv[])
+bool isFileExist(FILE* fileName)
 {
-    FILE *input = fopen("sources/text.txt", "r"), *output = fopen("sources/dict.csv", "w");
-    LinkedMap* map = makeNewMap();
+    return (fileName != NULL);
+}
+
+void fillMap(LinkedMap* map, FILE* fileName)
+{
     char word[128] = "";
 
-    while (fscanf(input, "%s", word) != EOF) {
-        fscanf(input, "%s", word);
+    while (fscanf(fileName, "%s", &word) != EOF) {
         put(map, word, 1);
     }
 
-    printMap(map);
+}
+
+int main(int argc, char* argv[])
+{
+    if (argc != 3) {
+        printf("Incorrect number of arguments");
+        return 0;
+    }
+
+    FILE* input = fopen(argv[1], "r");
+    if (!(isFileExist(input))) {
+        printf("The file doesn't exist");
+        return 0;
+    }
+
+    FILE* output = fopen(argv[2], "w");
+    LinkedMap* map = makeNewMap();
+
+    fillMap(map, input);
+    printMap(map, output);
+    freeMap(map);
 
     return 0;
 }
