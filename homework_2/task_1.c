@@ -11,7 +11,7 @@ void fillMap(LinkedMap* map, FILE* fileName)
     char word[128] = "";
 
     while (fscanf(fileName, "%s", word) != EOF) {
-        if(hasKey(map, word))
+        if (hasKey(map, word))
             put(map, word, get(map, word) + 1);
         else
             put(map, word, 1);
