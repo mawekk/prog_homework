@@ -14,7 +14,7 @@ void fillMap(LinkedMap* map, FILE* fileName)
         if(hasKey(map, word))
             put(map, word, get(map, word) + 1);
         else
-            put(map, word,  1);
+            put(map, word, 1);
     }
 }
 
