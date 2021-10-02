@@ -9,7 +9,7 @@ struct LinkedMap {
 };
 
 struct MapElement {
-    const char *key;
+    const char* key;
     int value;
     MapElement* prevElement;
 };
@@ -53,8 +53,7 @@ void put(LinkedMap* map, const char* key, int value)
     if (hasKey(map, key)) {
         MapElement* currElement = findKey(map, key);
         currElement->value = get(map, key) + value;
-    }
-    else
+    } else
         makeNewMapElement(key, value, map);
 }
 

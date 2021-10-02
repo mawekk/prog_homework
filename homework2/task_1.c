@@ -13,7 +13,6 @@ void fillMap(LinkedMap* map, FILE* fileName)
     while (fscanf(fileName, "%s", &word) != EOF) {
         put(map, word, 1);
     }
-
 }
 
 int main(int argc, char* argv[])
