@@ -11,7 +11,7 @@ struct LinkedMap {
 struct MapElement {
     const char* key;
     int value;
-    MapElement* prevElement;
+    MapElement* previousElement;
 };
 
 LinkedMap* makeNewMap()
@@ -27,17 +27,17 @@ MapElement* makeNewMapElement(const char* key, int value, LinkedMap* map)
     MapElement* newElement = malloc(sizeof(MapElement));
     newElement->key = strdup(key);
     newElement->value = value;
-    newElement->prevElement = map->tail;
+    newElement->previousElement = map->tail;
     map->tail = newElement;
-    map->mapSize = map->mapSize + 1;
+    map->mapSize++;
     return newElement;
 }
 
 MapElement* findKey(LinkedMap* map, const char* key)
 {
-    for (MapElement* currElement = map->tail; currElement; currElement = currElement->prevElement) {
-        if (strcmp(currElement->key, key) == 0)
-            return currElement;
+    for (MapElement* currentElement = map->tail; currentElement; currentElement = currentElement->previousElement) {
+        if (strcmp(currentElement->key, key) == 0)
+            return currentElement;
     }
 
     return NULL;
@@ -51,27 +51,30 @@ bool hasKey(LinkedMap* map, const char* key)
 void put(LinkedMap* map, const char* key, int value)
 {
     if (hasKey(map, key)) {
-        MapElement* currElement = findKey(map, key);
-        currElement->value = get(map, key) + value;
+        MapElement* currentElement = findKey(map, key);
+        currentElement->value = value;
     } else
         makeNewMapElement(key, value, map);
 }
 
 int get(LinkedMap* map, const char* key)
 {
-    MapElement* currElement = findKey(map, key);
-    return currElement->value;
+    MapElement* currentElement = findKey(map, key);
+    return currentElement->value;
 }
 
 void printMap(LinkedMap* map, FILE* fileName)
 {
-    for (MapElement* currElement = map->tail; currElement; currElement = currElement->prevElement)
-        fprintf(fileName, "%s: %d\n", currElement->key, currElement->value);
+    for (MapElement* currentElement = map->tail; currentElement; currentElement = currentElement->previousElement)
+        fprintf(fileName, "%s,%d\n", currentElement->key, currentElement->value);
 }
 
 void freeMap(LinkedMap* map)
 {
-    for (MapElement* currElement = map->tail; currElement; currElement = currElement->prevElement)
-        free(currElement);
+    MapElement* previous = NULL;
+    for (MapElement* currentElement; currentElement; currentElement = previous) {
+        previous = currentElement->previousElement;
+        free(currentElement);
+    }
     free(map);
 }
