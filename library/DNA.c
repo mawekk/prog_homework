@@ -3,14 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct MapDNA
-{
+struct MapDNA {
     MapElement* head;
     int mapSize;
 };
 
-struct MapElement
-{
+struct MapElement {
     const char* DNA;
     MapElement* nextElement;
 };
@@ -36,7 +34,7 @@ MapElement* makeNewElement(MapDNA* map, const char* DNA)
 
 void deleteFragment(MapDNA* map, char* start, char* end)
 {
-    MapElement* element  = map->head;
+    MapElement* element = map->head;
     char* dna = strdup(element->DNA);
     char* first = strstr(dna, start);
 
