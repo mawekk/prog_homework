@@ -3,14 +3,12 @@
 #include <stdlib.h>
 
 struct Vector {
-    int size;
     int* coordinates;
 };
 
 Vector* makeNewVector(int size, int* map)
 {
     Vector* new = malloc(sizeof(Vector));
-    new->size = size;
     new->coordinates = map;
 
     return new;
