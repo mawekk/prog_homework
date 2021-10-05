@@ -18,7 +18,6 @@ MapDNA* makeNewMap()
     MapDNA* map = malloc(sizeof(MapDNA));
     map->mapSize = 0;
     map->head = NULL;
-
     return map;
 }
 
@@ -28,7 +27,8 @@ MapElement* makeNewElement(MapDNA* map, const char* DNA)
     new->nextElement = map->head;
     map->head = new;
     new->DNA = strdup(DNA);
-
+    map->mapSize++;
+    printf("new: %s\n", DNA);
     return new;
 }
 
@@ -47,8 +47,8 @@ void deleteFragment(MapDNA* map, char* start, char* end)
             first[j] = first[j + 1];
     }
 
+    printf("del: ");
     makeNewElement(map, dna);
-    printf("%s", dna);
 }
 
 void replaceFragment(MapDNA* map, char* template, char* fragment)
@@ -65,6 +65,7 @@ void replaceFragment(MapDNA* map, char* template, char* fragment)
         }
     }
 
+    printf("repl: ");
     makeNewElement(map, dna);
 }
 
@@ -80,5 +81,6 @@ void insertFragment(MapDNA* map, char* start, char* fragment)
     for (int i = strlen(start); i < strlen(start) + strlen(fragment); ++i)
         position[i] = fragment[i - strlen(start)];
 
+    printf("ins: ");
     makeNewElement(map, dna);
 }
