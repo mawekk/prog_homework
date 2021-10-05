@@ -43,3 +43,8 @@ void vectorDifference(Vector* first, Vector* second, int size, int* difference_c
     for (int i = 0; i < size; ++i)
         difference_coordinates[i] = first->coordinates[i] - second->coordinates[i];
 }
+
+void freeVector(Vector* vector)
+{
+    free(vector);
+}

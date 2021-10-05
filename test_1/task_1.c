@@ -22,6 +22,9 @@ void printValues(Vector* firstVector, Vector* secondVector, int size)
     for (int i = 0; i < size; ++i)
         printf("%d ", difference[i]);
     printf("\n");
+
+    free(sum);
+    free(difference);
 }
 
 int main()
@@ -45,6 +48,10 @@ int main()
     Vector* secondVector = makeNewVector(size, secondCoordinates);
 
     printValues(firstVector, secondVector, size);
+    freeVector(firstVector);
+    freeVector(secondVector);
+    free(firstCoordinates);
+    free(secondCoordinates);
 
     return 0;
 }
