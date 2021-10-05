@@ -7,3 +7,7 @@ set(SOURCE_LIB
     library/commonUtils/numericOperations.c
 )
 add_library(library ${SOURCE_LIB})
+add_library(Vector STATIC library/vector.c)
+
+add_executable(test1_task_1 test_1/task_1.c)
+target_link_libraries(test1_task_1 Vector)
