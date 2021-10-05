@@ -1,7 +1,6 @@
 #include "vector.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include "math.h"
+#include <stdlib.h>
 
 struct Vector {
     int size;
@@ -21,7 +20,7 @@ int scalarProduct(Vector* first, Vector* second, int size)
 {
     int result = 0;
     for (int i = 0; i < size; ++i)
-        result = result + first->coordinates[i]*second->coordinates[i];
+        result = result + first->coordinates[i] * second->coordinates[i];
 
     return result;
 }
@@ -30,7 +29,7 @@ float vectorLength(Vector* vector, int size)
 {
     int result = 0;
     for (int i = 0; i < size; ++i)
-        result = result + vector->coordinates[i]*vector->coordinates[i];
+        result = result + vector->coordinates[i] * vector->coordinates[i];
 
     return sqrt(result);
 }
@@ -39,12 +38,10 @@ void additionOfVectors(Vector* first, Vector* second, int size, int* sum_coordin
 {
     for (int i = 0; i < size; ++i)
         sum_coordinates[i] = first->coordinates[i] + second->coordinates[i];
-
 }
 
 void vectorDifference(Vector* first, Vector* second, int size, int* difference_coordinates)
 {
     for (int i = 0; i < size; ++i)
         difference_coordinates[i] = first->coordinates[i] - second->coordinates[i];
-
 }
