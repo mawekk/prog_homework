@@ -50,7 +50,7 @@ bool hasKey(LinkedMap* map, const char* key)
 
 void put(LinkedMap* map, const char* key, int value)
 {
-    MapElement* currentElement = hasKey(map, key);
+    MapElement* currentElement = findKey(map, key);
     if (currentElement)
         currentElement->value = value;
     else
@@ -73,7 +73,7 @@ void freeMap(LinkedMap* map)
 {
     MapElement* previous = NULL;
     for (MapElement* currentElement; currentElement; currentElement = previous) {
-        free(currentElement->key);
+        free(&currentElement->key);
         previous = currentElement->previousElement;
         free(currentElement);
     }
