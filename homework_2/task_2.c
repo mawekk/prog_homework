@@ -7,8 +7,9 @@ bool isFileExist(FILE* fileName)
     return (fileName != NULL);
 }
 
-void readFile(List* list, FILE* fileName)
+void readFile(FILE* fileName)
 {
+    List* list = makeNewList();
     int size = 0, numberOfLogs = 0;
     fscanf(fileName, "%d", &size);
     char originalData[size], log[128] = "", firstData[128] = "", secondData[128] = "";
@@ -18,6 +19,7 @@ void readFile(List* list, FILE* fileName)
 
     fscanf(fileName, "%d", &numberOfLogs);
     for (int i = 0; i < numberOfLogs; ++i) {
+        printf("%d\n", i + 1);
         fscanf(fileName, "%s", log);
         fscanf(fileName, "%s", firstData);
         fscanf(fileName, "%s", secondData);
@@ -27,17 +29,14 @@ void readFile(List* list, FILE* fileName)
         if (!strcmp(log, "REPLACE")) {
             replaceFragment(list, firstData, secondData);
             printList(list);
-        }
-        else if (!strcmp(log, "INSERT")) {
+        } else if (!strcmp(log, "INSERT")) {
             insertFragment(list, firstData, secondData);
             printList(list);
-        }
-        else if (!strcmp(log, "DELETE")) {
+        } else if (!strcmp(log, "DELETE")) {
             deleteFragment(list, firstData, secondData);
             printList(list);
         }
         getchar();
-
     }
 }
 
@@ -54,7 +53,6 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    List* list = makeNewList();
-    readFile(list, input);
+    readFile(input);
     return 0;
 }

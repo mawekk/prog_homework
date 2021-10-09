@@ -39,14 +39,12 @@ void appendElement(List* list, char symbol)
         list->head = element;
         element->previousElement = NULL;
         element->nextElement = list->tail;
-    }
-    else if (!list->tail){
+    } else if (!list->tail) {
         list->tail = element;
         list->tail->previousElement = list->head;
         list->head->nextElement = list->tail;
         list->tail->nextElement = NULL;
-    }
-    else {
+    } else {
         list->tail->nextElement = element;
         element->previousElement = list->tail;
         list->tail = element;
@@ -59,7 +57,7 @@ void findFragment(List* list, ListElement** beginning, ListElement** ending, cha
     for (ListElement* current = list->head; current; current = current->nextElement) {
         char string[128] = "";
         int i = 0;
-        for (ListElement* element = current; element; element = element->nextElement)  {
+        for (ListElement* element = current; element; element = element->nextElement) {
             string[i] = element->symbol;
             i++;
             if (strlen(string) == strlen(fragment)) {
@@ -142,4 +140,13 @@ void fillList(List* list, char* data)
 {
     for (int i = 0; i < strlen(data); ++i)
         appendElement(list, data[i]);
+}
+
+void freeList(List* list)
+{
+    ListElement* next = NULL;
+    for (ListElement* element = list->head; element; element = next) {
+        next = element->nextElement;
+        free(element);
+    }
 }
