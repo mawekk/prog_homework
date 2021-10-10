@@ -73,7 +73,7 @@ void freeMap(LinkedMap* map)
 {
     MapElement* previous = NULL;
     for (MapElement* currentElement; currentElement; currentElement = previous) {
-        free(&currentElement->key);
+        free((char*)currentElement->key);
         previous = currentElement->previousElement;
         free(currentElement);
     }
