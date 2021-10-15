@@ -1,6 +1,6 @@
+#include "math.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "math.h"
 
 void reverse(int* binary)
 {
@@ -47,12 +47,10 @@ void addBinary(int* firstTerm, int* secondTerm, int* sum)
         if (sum[i] == 2) {
             sum[i] = 0;
             memory = 1;
-        }
-        else if (sum[i] == 3) {
+        } else if (sum[i] == 3) {
             sum[i] = 1;
             memory = 1;
-        }
-        else
+        } else
             memory = 0;
     }
 
