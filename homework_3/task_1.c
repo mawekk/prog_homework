@@ -4,7 +4,7 @@
 
 void reverse(int* binary)
 {
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 16; i++) {
         if (binary[i] == 0)
             binary[i] = 1;
         else
@@ -15,7 +15,7 @@ void reverse(int* binary)
 void convertToBinary(int originalNumber, int* binary)
 {
     int number = abs(originalNumber);
-    int i = 7;
+    int i = 15;
 
     while (number > 0) {
         if (number % 2 == 0)
@@ -33,7 +33,7 @@ void convertToBinary(int originalNumber, int* binary)
 
 void printBinary(int* binary)
 {
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 16; i++)
         printf("%d", binary[i]);
     printf("\n");
 }
@@ -42,7 +42,7 @@ void addBinary(int* firstTerm, int* secondTerm, int* sum)
 {
     int memory = 0;
 
-    for (int i = 7; i >= 0; i--) {
+    for (int i = 15; i >= 0; i--) {
         sum[i] = firstTerm[i] + secondTerm[i] + memory;
         if (sum[i] == 2) {
             sum[i] = 0;
@@ -55,7 +55,7 @@ void addBinary(int* firstTerm, int* secondTerm, int* sum)
     }
 
     if (memory == 1) {
-        int* remain = calloc(8, sizeof(int));
+        int* remain = calloc(16, sizeof(int));
         convertToBinary(memory, remain);
         addBinary(remain, sum, sum);
     }
@@ -69,9 +69,9 @@ int convertToDecimal(int* binary)
 
     if (firstBite == 1)
         reverse(binary);
-    for (int i = 7; i > 0; i--) {
+    for (int i = 15; i > 0; i--) {
         degree = 1;
-        for (int j = 0; j < 7 - i; j++)
+        for (int j = 0; j < 15 - i; j++)
             degree = degree * 2;
         number += binary[i] * degree;
     }
@@ -85,10 +85,10 @@ int main()
 {
     int firstNumber = 0;
     int secondNumber = 0;
-    int* firstBinary = calloc(8, sizeof(int));
-    int* secondBinary = calloc(8, sizeof(int));
+    int* firstBinary = calloc(16, sizeof(int));
+    int* secondBinary = calloc(16, sizeof(int));
     int sum = 0;
-    int* sumBinary = calloc(8, sizeof(int));
+    int* sumBinary = calloc(16, sizeof(int));
 
     printf("Enter numbers:\n");
     scanf("%d", &firstNumber);
