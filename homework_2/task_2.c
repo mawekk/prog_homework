@@ -43,7 +43,6 @@ void readFile(FILE* input, FILE* output)
         }
     }
     freeList(list);
-
 }
 
 int main(int argc, char* argv[])
