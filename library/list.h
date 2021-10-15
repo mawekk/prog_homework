@@ -11,6 +11,7 @@ List* makeNewList();
 void fillList(List* list, char* data);
 void printList(List* list);
 void freeList(List* list);
+void printListInFile(List* list, FILE* output);
 
 void deleteFragment(List* list, char* start, char* end);
 void insertFragment(List* list, char* start, char* fragment);

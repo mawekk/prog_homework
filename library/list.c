@@ -38,11 +38,7 @@ void appendElement(List* list, char symbol)
     if (!list->head) {
         list->head = element;
         element->previousElement = NULL;
-        element->nextElement = list->tail;
-    } else if (!list->tail) {
         list->tail = element;
-        list->tail->previousElement = list->head;
-        list->head->nextElement = list->tail;
         list->tail->nextElement = NULL;
     } else {
         list->tail->nextElement = element;
@@ -52,26 +48,26 @@ void appendElement(List* list, char symbol)
     }
 }
 
-void findFragment(List* list, ListElement** beginning, ListElement** ending, char* fragment)
+void findFragment(ListElement* start, ListElement** beginning, ListElement** ending, char* fragment)
 {
-    for (ListElement* current = list->head; current; current = current->nextElement) {
+    for (ListElement* current = start; current; current = current->nextElement) {
         char string[128] = "";
         int i = 0;
         for (ListElement* element = current; element; element = element->nextElement) {
             string[i] = element->symbol;
-            i++;
-            if (strlen(string) == strlen(fragment)) {
+            if (!fragment[i + 1]) {
                 *beginning = current;
                 *ending = element;
                 break;
             }
+            i++;
         }
         if (!(strcmp(string, fragment)))
             break;
     }
 }
 
-void deleteElements(ListElement* start, ListElement* end)
+void deleteElements(ListElement* start, ListElement* end, List* list)
 {
     ListElement* element = start;
     ListElement* next = element->nextElement;
@@ -82,15 +78,23 @@ void deleteElements(ListElement* start, ListElement* end)
         element = next;
         next = element->nextElement;
     }
+    if (start == list->head)
+        list->head = element;
+    if (end == list->tail)
+        list->tail = element;
 }
 
-void insertElements(ListElement* current, char* fragment)
+void insertElements(ListElement* current, char* fragment, List* list)
 {
-    for (int i = 0; i < strlen(fragment); ++i) {
+    for (int i = 0; fragment[i]; ++i) {
         ListElement* new = makeNewElement(fragment[i]);
         new->previousElement = current;
         new->nextElement = current->nextElement;
         current->nextElement = new;
+        if (current == list->tail)
+            list->tail = new;
+        if (current == list->head)
+            list->head = new;
         current = new;
     }
 }
@@ -101,32 +105,37 @@ void deleteFragment(List* list, char* start, char* end)
     ListElement* startEnding = NULL;
     ListElement* endBeginning = NULL;
     ListElement* endEnding = NULL;
-    findFragment(list, &startBeginning, &startEnding, start);
-    findFragment(list, &endBeginning, &endEnding, end);
+    findFragment(list->head, &startBeginning, &startEnding, start);
+    findFragment(startEnding->nextElement, &endBeginning, &endEnding, end);
 
-    deleteElements(startBeginning, endEnding);
+    deleteElements(startBeginning, endEnding, list);
 }
 
 void replaceFragment(List* list, char* template, char* fragment)
 {
     ListElement* templateBeginning = NULL;
     ListElement* templateEnding = NULL;
-    findFragment(list, &templateBeginning, &templateEnding, template);
+    findFragment(list->head, &templateBeginning, &templateEnding, template);
 
     ListElement* current = templateBeginning->previousElement;
-    deleteElements(templateBeginning, templateEnding);
+    if (current == NULL) {
+        current = templateEnding->nextElement;
+        if (current == NULL)
+            current = list->head;
+    }
+    deleteElements(templateBeginning, templateEnding, list);
 
-    insertElements(current, fragment);
+    insertElements(current, fragment, list);
 }
 
 void insertFragment(List* list, char* start, char* fragment)
 {
     ListElement* startBeginning = NULL;
     ListElement* startEnding = NULL;
-    findFragment(list, &startBeginning, &startEnding, start);
+    findFragment(list->head, &startBeginning, &startEnding, start);
 
     ListElement* current = startEnding;
-    insertElements(current, fragment);
+    insertElements(current, fragment, list);
 }
 
 void printList(List* list)
@@ -149,4 +158,12 @@ void freeList(List* list)
         next = element->nextElement;
         free(element);
     }
+    free(list);
+}
+
+void printListInFile(List* list, FILE* output)
+{
+    for (ListElement* element = list->head; element; element = element->nextElement)
+        fprintf(output, "%c", element->symbol);
+    fprintf(output, "\n");
 }
