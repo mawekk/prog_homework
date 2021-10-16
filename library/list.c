@@ -116,8 +116,7 @@ void deleteFragment(List* list, char* start, char* end)
             deleteElements(startBeginning, endEnding, list);
         else
             printf("ERROR");
-    }
-    else
+    } else
         printf("ERROR");
 }
 
@@ -130,8 +129,7 @@ void replaceFragment(List* list, char* template, char* fragment)
         ListElement* current = templateBeginning->previousElement;
         deleteElements(templateBeginning, templateEnding, list);
         insertElements(current, fragment, list);
-    }
-    else
+    } else
         printf("ERROR");
 }
 
@@ -142,8 +140,7 @@ void insertFragment(List* list, char* start, char* fragment)
     if (findFragment(list->head, &startBeginning, &startEnding, start)) {
         ListElement* current = startEnding;
         insertElements(current, fragment, list);
-    }
-    else
+    } else
         printf("ERROR");
 }
 
