@@ -13,7 +13,8 @@ void readFile(FILE* input, FILE* output)
     int size = 0;
     int numberOfLogs = 0;
     fscanf(input, "%d", &size);
-    char originalData[size + 1], log[128] = "";
+    char originalData[size + 1];
+    char log[128] = "";
     char firstData[128] = "";
     char secondData[128] = "";
     fscanf(input, "%s", originalData);

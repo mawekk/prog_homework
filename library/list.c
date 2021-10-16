@@ -45,36 +45,18 @@ void appendElement(List* list, char symbol)
     }
 }
 
-bool match(List* string, char* fragment)
-{
-    int i = 0;
-    for (ListElement* current = string->head; current; current = current->nextElement) {
-        if (current->symbol != fragment[i])
-            return false;
-        i++;
-    }
-    return true;
-}
-
 bool findFragment(ListElement* start, ListElement** beginning, ListElement** ending, char* fragment)
 {
     for (ListElement* current = start; current; current = current->nextElement) {
-        List* string = makeNewList();
         int i = 0;
-        for (ListElement* element = current; element; element = element->nextElement) {
-            appendElement(string, element->symbol);
+        for (ListElement* element = current; element && element->symbol == fragment[i]; element = element->nextElement) {
             if (!fragment[i + 1]) {
                 *beginning = current;
                 *ending = element;
-                break;
+                return true;
             }
             i++;
         }
-        if (match(string, fragment)) {
-            freeList(string);
-            return true;
-        }
-        freeList(string);
     }
     return false;
 }
@@ -107,6 +89,7 @@ void insertElements(ListElement* current, char* fragment, List* list)
         ListElement* new = makeNewElement(fragment[i]);
         if (!current) {
             new->nextElement = list->head;
+            list->head->previousElement = new;
             list->head = new;
             current = list->head;
         } else {
@@ -116,8 +99,6 @@ void insertElements(ListElement* current, char* fragment, List* list)
             current->nextElement = new;
             if (current == list->tail)
                 list->tail = new;
-            if (current == list->head)
-                list->head = new;
             current = new;
         }
     }
