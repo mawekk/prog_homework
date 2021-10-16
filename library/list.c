@@ -52,7 +52,6 @@ void printList(List* list)
     printf("\n");
 }
 
-
 bool findFragment(ListElement* start, ListElement** beginning, ListElement** ending, char* fragment)
 {
     for (ListElement* current = start; current; current = current->nextElement) {
