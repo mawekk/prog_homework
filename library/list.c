@@ -45,6 +45,14 @@ void appendElement(List* list, char symbol)
     }
 }
 
+void printList(List* list)
+{
+    for (ListElement* element = list->head; element; element = element->nextElement)
+        printf("%c", element->symbol);
+    printf("\n");
+}
+
+
 bool findFragment(ListElement* start, ListElement** beginning, ListElement** ending, char* fragment)
 {
     for (ListElement* current = start; current; current = current->nextElement) {
@@ -64,7 +72,7 @@ bool findFragment(ListElement* start, ListElement** beginning, ListElement** end
 void deleteElements(ListElement* start, ListElement* end, List* list)
 {
     ListElement* element = start;
-    ListElement* startPrevious = start->previousElement;
+    ListElement* startPrevious = element->previousElement;
     ListElement* endNext = end->nextElement;
     ListElement* next = element->nextElement;
     while (element != endNext) {
@@ -72,10 +80,12 @@ void deleteElements(ListElement* start, ListElement* end, List* list)
             list->head = next;
         else
             element->previousElement->nextElement = next;
-        next->previousElement = element->previousElement;
+        if (next)
+            next->previousElement = element->previousElement;
         free(element);
         element = next;
-        next = element->nextElement;
+        if (element)
+            next = element->nextElement;
     }
     if (!startPrevious)
         list->head = endNext;
@@ -88,14 +98,19 @@ void insertElements(ListElement* current, char* fragment, List* list)
     for (int i = 0; fragment[i]; ++i) {
         ListElement* new = makeNewElement(fragment[i]);
         if (!current) {
-            new->nextElement = list->head;
-            list->head->previousElement = new;
-            list->head = new;
+            if (!list->head)
+                appendElement(list, new->symbol);
+            else {
+                new->nextElement = list->head;
+                list->head->previousElement = new;
+                list->head = new;
+            }
             current = list->head;
         } else {
             new->previousElement = current;
             new->nextElement = current->nextElement;
-            current->nextElement->previousElement = new;
+            if (current->nextElement)
+                current->nextElement->previousElement = new;
             current->nextElement = new;
             if (current == list->tail)
                 list->tail = new;
@@ -144,13 +159,6 @@ bool insertFragment(List* list, char* start, char* fragment)
         return true;
     }
     return false;
-}
-
-void printList(List* list)
-{
-    for (ListElement* element = list->head; element; element = element->nextElement)
-        printf("%c", element->symbol);
-    printf("\n");
 }
 
 void fillList(List* list, char* data)
