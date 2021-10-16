@@ -18,29 +18,26 @@ void readFile(FILE* input, FILE* output)
     char secondData[128] = "";
     fscanf(input, "%s", originalData);
     fillList(list, originalData);
+    printList(list);
 
     fscanf(input, "%d", &numberOfLogs);
     for (int i = 0; i < numberOfLogs; ++i) {
-        /*printf("%d\n", i + 1);*/
+        printf("%d\n", i + 1);
         fscanf(input, "%s", log);
         fscanf(input, "%s", firstData);
         fscanf(input, "%s", secondData);
-        /*printf("%s\n", log);
-        printf("%s %s\n", firstData, secondData);*/
+        printf("%s\n", log);
+        printf("%s %s\n", firstData, secondData);
 
-        if (!strcmp(log, "REPLACE")) {
+        if (!strcmp(log, "REPLACE"))
             replaceFragment(list, firstData, secondData);
-            printList(list);
-            printListInFile(list, output);
-        } else if (!strcmp(log, "INSERT")) {
+        else if (!strcmp(log, "INSERT"))
             insertFragment(list, firstData, secondData);
-            printList(list);
-            printListInFile(list, output);
-        } else if (!strcmp(log, "DELETE")) {
+        else if (!strcmp(log, "DELETE"))
             deleteFragment(list, firstData, secondData);
-            printList(list);
-            printListInFile(list, output);
-        }
+        printList(list);
+        printListInFile(list, output);
+        getchar();
     }
     freeList(list);
 }
