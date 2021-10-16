@@ -1,7 +1,7 @@
 #include "binary.h"
-#include <stdlib.h>
-#include <stdio.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 void reverse(int* binary)
 {
