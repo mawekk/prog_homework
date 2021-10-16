@@ -45,13 +45,24 @@ void appendElement(List* list, char symbol)
     }
 }
 
+bool match(List* string, char* fragment)
+{
+    int i = 0;
+    for (ListElement* current = string->head; current; current = current->nextElement) {
+        if (current->symbol != fragment[i])
+            return false;
+        i++;
+    }
+    return true;
+}
+
 bool findFragment(ListElement* start, ListElement** beginning, ListElement** ending, char* fragment)
 {
     for (ListElement* current = start; current; current = current->nextElement) {
-        char string[128] = "";
+        List* string = makeNewList();
         int i = 0;
         for (ListElement* element = current; element; element = element->nextElement) {
-            string[i] = element->symbol;
+            appendElement(string, element->symbol);
             if (!fragment[i + 1]) {
                 *beginning = current;
                 *ending = element;
@@ -59,8 +70,11 @@ bool findFragment(ListElement* start, ListElement** beginning, ListElement** end
             }
             i++;
         }
-        if (!(strcmp(string, fragment)))
+        if (match(string, fragment)) {
+            freeList(string);
             return true;
+        }
+        freeList(string);
     }
     return false;
 }
@@ -72,13 +86,14 @@ void deleteElements(ListElement* start, ListElement* end, List* list)
     ListElement* endNext = end->nextElement;
     ListElement* next = element->nextElement;
     while (element != endNext) {
-        printf("%c %c\n", element->symbol, next->symbol);
-        element->previousElement->nextElement = next;
+        if (!element->previousElement)
+            list->head = next;
+        else
+            element->previousElement->nextElement = next;
         next->previousElement = element->previousElement;
         free(element);
         element = next;
         next = element->nextElement;
-        printList(list);
     }
     if (!startPrevious)
         list->head = endNext;
@@ -88,39 +103,43 @@ void deleteElements(ListElement* start, ListElement* end, List* list)
 
 void insertElements(ListElement* current, char* fragment, List* list)
 {
-    if (!current)
-        current = list->head;
-
     for (int i = 0; fragment[i]; ++i) {
         ListElement* new = makeNewElement(fragment[i]);
-        new->previousElement = current;
-        new->nextElement = current->nextElement;
-        current->nextElement = new;
-        current->nextElement->previousElement = new;
-        if (current == list->tail)
-            list->tail = new;
-        if (current == list->head)
+        if (!current) {
+            new->nextElement = list->head;
             list->head = new;
-        current = new;
+            current = list->head;
+        } else {
+            new->previousElement = current;
+            new->nextElement = current->nextElement;
+            current->nextElement->previousElement = new;
+            current->nextElement = new;
+            if (current == list->tail)
+                list->tail = new;
+            if (current == list->head)
+                list->head = new;
+            current = new;
+        }
     }
 }
 
-void deleteFragment(List* list, char* start, char* end)
+bool deleteFragment(List* list, char* start, char* end)
 {
     ListElement* startBeginning = NULL;
     ListElement* startEnding = NULL;
     ListElement* endBeginning = NULL;
     ListElement* endEnding = NULL;
     if (findFragment(list->head, &startBeginning, &startEnding, start)) {
-        if (findFragment(startEnding->nextElement, &endBeginning, &endEnding, end))
+        if (findFragment(startEnding->nextElement, &endBeginning, &endEnding, end)) {
             deleteElements(startBeginning, endEnding, list);
-        else
-            printf("ERROR");
-    } else
-        printf("ERROR");
+            return true;
+        }
+        return false;
+    }
+    return false;
 }
 
-void replaceFragment(List* list, char* template, char* fragment)
+bool replaceFragment(List* list, char* template, char* fragment)
 {
     ListElement* templateBeginning = NULL;
     ListElement* templateEnding = NULL;
@@ -129,19 +148,21 @@ void replaceFragment(List* list, char* template, char* fragment)
         ListElement* current = templateBeginning->previousElement;
         deleteElements(templateBeginning, templateEnding, list);
         insertElements(current, fragment, list);
-    } else
-        printf("ERROR");
+        return true;
+    }
+    return true;
 }
 
-void insertFragment(List* list, char* start, char* fragment)
+bool insertFragment(List* list, char* start, char* fragment)
 {
     ListElement* startBeginning = NULL;
     ListElement* startEnding = NULL;
     if (findFragment(list->head, &startBeginning, &startEnding, start)) {
         ListElement* current = startEnding;
         insertElements(current, fragment, list);
-    } else
-        printf("ERROR");
+        return true;
+    }
+    return false;
 }
 
 void printList(List* list)
