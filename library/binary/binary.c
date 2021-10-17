@@ -29,6 +29,9 @@ void convertToBinary(int originalNumber, int* binary)
 
     if (originalNumber < 0) {
         reverse(binary);
+        int* add = calloc(16, sizeof(int));
+        convertToBinary(1, add);
+        addBinary(add, binary, binary);
     }
 }
 
@@ -54,12 +57,6 @@ void addBinary(int* firstTerm, int* secondTerm, int* sum)
         } else
             memory = 0;
     }
-
-    if (memory == 1) {
-        int* remain = calloc(16, sizeof(int));
-        convertToBinary(memory, remain);
-        addBinary(remain, sum, sum);
-    }
 }
 
 int convertToDecimal(int* binary)
@@ -68,8 +65,12 @@ int convertToDecimal(int* binary)
     int degree = 1;
     int firstBite = binary[0];
 
-    if (firstBite == 1)
+    if (firstBite == 1) {
+        int* add = calloc(16, sizeof(int));
+        convertToBinary(-1, add);
+        addBinary(add, binary, binary);
         reverse(binary);
+    }
     for (int i = 15; i > 0; i--) {
         degree = 1;
         for (int j = 0; j < 15 - i; j++)
