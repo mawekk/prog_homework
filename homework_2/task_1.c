@@ -1,4 +1,4 @@
-#include "../library/map.h"
+#include "../library/map/map.h"
 #include <stdio.h>
 
 bool isFileExist(FILE* fileName)
