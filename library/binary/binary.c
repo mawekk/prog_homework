@@ -59,6 +59,7 @@ int convertToDecimal(int* binary, int size)
         convertToBinary(-1, add, size);
         addBinary(add, binary, binary, size);
         reverse(binary, size);
+        free(add);
     }
     for (int i = size - 1; i > 0; i--) {
         degree = 1;
