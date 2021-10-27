@@ -3,77 +3,66 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void reverse(int* binary)
+void reverse(int* binary, int size)
 {
-    for (int i = 0; i < 16; i++) {
-        if (binary[i] == 0)
-            binary[i] = 1;
-        else
-            binary[i] = 0;
-    }
+    for (int i = 0; i < size; i++)
+        binary[i] = 1 - binary[i];
 }
 
-void convertToBinary(int originalNumber, int* binary)
+void convertToBinary(int originalNumber, int* binary, int size)
 {
     int number = abs(originalNumber);
-    int i = 15;
+    int i = size - 1;
 
     while (number > 0) {
-        if (number % 2 == 0)
-            binary[i] = 0;
-        else
-            binary[i] = 1;
+        binary[i] = number % 2;
         i--;
         number = number / 2;
     }
 
     if (originalNumber < 0) {
-        reverse(binary);
-        int* add = calloc(16, sizeof(int));
-        convertToBinary(1, add);
-        addBinary(add, binary, binary);
+        reverse(binary, size);
+        int* add = calloc(size, sizeof(int));
+        convertToBinary(1, add, size);
+        addBinary(add, binary, binary, size);
+        free(add);
     }
 }
 
-void printBinary(int* binary)
+void printBinary(int* binary, int size)
 {
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < size; i++)
         printf("%d", binary[i]);
     printf("\n");
 }
 
-void addBinary(int* firstTerm, int* secondTerm, int* sum)
+void addBinary(int* firstTerm, int* secondTerm, int* sum, int size)
 {
     int memory = 0;
+    int summa = 0;
 
-    for (int i = 15; i >= 0; i--) {
-        sum[i] = firstTerm[i] + secondTerm[i] + memory;
-        if (sum[i] == 2) {
-            sum[i] = 0;
-            memory = 1;
-        } else if (sum[i] == 3) {
-            sum[i] = 1;
-            memory = 1;
-        } else
-            memory = 0;
+    for (int i = size - 1; i >= 0; i--) {
+        summa = firstTerm[i] + secondTerm[i] + memory;
+        sum[i] = summa % 2;
+        memory = summa / 2;
     }
 }
 
-int convertToDecimal(int* binary)
+int convertToDecimal(int* binary, int size)
 {
     int number = 0;
     int degree = 1;
     int firstBite = binary[0];
 
     if (firstBite == 1) {
-        int* add = calloc(16, sizeof(int));
-        convertToBinary(-1, add);
-        addBinary(add, binary, binary);
-        reverse(binary);
+        int* add = calloc(size, sizeof(int));
+        convertToBinary(-1, add, size);
+        addBinary(add, binary, binary, size);
+        reverse(binary, size);
     }
-    for (int i = 15; i > 0; i--) {
+    for (int i = size - 1; i > 0; i--) {
         degree = 1;
-        for (int j = 0; j < 15 - i; j++)
+        for (int j = 0; j < size - 1 - i; j++)
             degree = degree * 2;
         number += binary[i] * degree;
     }
