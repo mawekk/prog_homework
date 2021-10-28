@@ -4,29 +4,26 @@
 
 int main()
 {
-    int const bitDepth = 16;
     int firstNumber = 0;
     int secondNumber = 0;
-    int* firstBinary = calloc(bitDepth, sizeof(int));
-    int* secondBinary = calloc(bitDepth, sizeof(int));
-    int* sumBinary = calloc(bitDepth, sizeof(int));
 
     printf("Enter numbers:\n");
     scanf("%d", &firstNumber);
     scanf("%d", &secondNumber);
 
-    convertToBinary(firstNumber, firstBinary, bitDepth);
-    convertToBinary(secondNumber, secondBinary, bitDepth);
+    int* firstBinary = convertToBinary(firstNumber);
+    int* secondBinary = convertToBinary(secondNumber);
 
     printf("First number in binary additional code:   ");
-    printBinary(firstBinary, bitDepth);
+    printBinary(firstBinary);
     printf("Second number in binary additional code:  ");
-    printBinary(secondBinary, bitDepth);
+    printBinary(secondBinary);
 
-    addBinary(firstBinary, secondBinary, sumBinary, bitDepth);
+    int* sumBinary = convertToBinary(0);
+    addBinary(firstBinary, secondBinary, sumBinary);
     printf("Sum of numbers in binary additional code: ");
-    printBinary(sumBinary, bitDepth);
-    printf("Sum of numbers in decimal system: %d", convertToDecimal(sumBinary, bitDepth));
+    printBinary(sumBinary);
+    printf("Sum of numbers in decimal system: %d", convertToDecimal(sumBinary));
 
     free(firstBinary);
     free(secondBinary);
