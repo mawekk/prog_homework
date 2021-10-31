@@ -5,6 +5,7 @@ set(CMAKE_C_STANDARD 11)
 
 set(SOURCE_LIB
         library/commonUtils/numericOperations.c
+        library/binary/binary.c
         )
 add_library(library ${SOURCE_LIB})
 add_library(Map STATIC library/map.c)
@@ -21,7 +22,10 @@ add_executable(task_5 homework_1/task_5.c)
 
 add_executable(hw2_task_1 homework_2/task_1.c)
 
+add_executable(hw3_task_2 homework_3/task_2.c)
+
 target_link_libraries(task_1 PRIVATE m)
 target_link_libraries(task_4 PRIVATE m)
 target_link_libraries(hw2_task_1 Map)
+target_link_libraries(hw3_task_2 library)
 target_link_libraries(test1_task_1 Vector m)
