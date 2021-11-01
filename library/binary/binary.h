@@ -8,6 +8,6 @@ void printBinary(int* binary);
 void addBinary(int* firstTerm, int* secondTerm, int* sum);
 void multiplyBinary(int* multiplied, int* multiplier, int* product);
 int convertToDecimal(int* binary);
-void convertFromHexToBinary(unsigned char hex[8]);
+void printResult(unsigned char hex[8]);
 
 #endif

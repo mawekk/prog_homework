@@ -5,10 +5,11 @@ typedef union Number {
     unsigned char hexForm[8];
 } Number;
 
-int main() {
+int main()
+{
     Number number;
     printf("Enter a number:\n");
     scanf("%lf", &number.value);
-    convertFromHexToBinary(number.hexForm);
+    printResult(number.hexForm);
     return 0;
 }
