@@ -97,9 +97,10 @@ void insertElements(ListElement* current, char* fragment, List* list)
     for (int i = 0; fragment[i]; ++i) {
         ListElement* new = makeNewElement(fragment[i]);
         if (!current) {
-            if (!list->head)
-                appendElement(list, new->symbol);
-            else {
+            if (!list->head) {
+                list->head = new;
+                list->tail = new;
+            } else {
                 new->nextElement = list->head;
                 list->head->previousElement = new;
                 list->head = new;
