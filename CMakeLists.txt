@@ -6,6 +6,7 @@ set(CMAKE_C_STANDARD 11)
 set(SOURCE_LIB
         library/commonUtils/numericOperations.c
         library/map/map.c
+        library/list/list.c
         library/vector/vector.c
         library/binary/binary.c
         )
