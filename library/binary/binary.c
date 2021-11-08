@@ -200,4 +200,3 @@ void printExponentialForm(unsigned char hex[8])
     free(shiftedOrder);
     free(mantissa);
 }
-
