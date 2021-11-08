@@ -19,5 +19,9 @@ int main()
     printBinary(productBinary);
     printf("Product in decimal: %d", convertToDecimal(productBinary));
 
+    free(firstBinary);
+    free(secondBinary);
+    free(productBinary);
+
     return 0;
 }
