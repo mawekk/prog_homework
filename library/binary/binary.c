@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BIT_DEPTH 64
+#define BIT_DEPTH 8
 
 void reverse(int* binary)
 {
@@ -171,21 +171,7 @@ int* convertFromHexToBinary(unsigned char hex[8])
 
     int position = 0;
     for (int i = 0; i < 16; i++) {
-        int number = 0;
-        if (hexString[i] == 'A')
-            number = 10;
-        else if (hexString[i] == 'B')
-            number = 11;
-        else if (hexString[i] == 'C')
-            number = 12;
-        else if (hexString[i] == 'D')
-            number = 13;
-        else if (hexString[i] == 'E')
-            number = 14;
-        else if (hexString[i] == 'F')
-            number = 15;
-        else
-            number = hexString[i] - '0';
+        int number = (hexString[i] >= 'A' && hexString[i] <= 'F') ? 10 + hexString[i] - 'A' : hexString[i] - '0';
         int* new = convertPartToBinary(number);
         appendToBinary(new, binary, position);
         position += 4;
@@ -195,7 +181,7 @@ int* convertFromHexToBinary(unsigned char hex[8])
     return binary;
 }
 
-void printResult(unsigned char hex[8])
+void printExponentialForm(unsigned char hex[8])
 {
     int* binary = convertFromHexToBinary(hex);
 
@@ -210,4 +196,8 @@ void printResult(unsigned char hex[8])
     double real = 1 + convertFromBinaryToReal(mantissa, 52);
 
     printf("Result: %c%.17lf * 2^%d\n", sign, real, exponent);
+
+    free(binary);
+    free(shiftedOrder);
+    free(mantissa);
 }

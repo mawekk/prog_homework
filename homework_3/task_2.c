@@ -10,6 +10,6 @@ int main()
     Number number;
     printf("Enter a number:\n");
     scanf("%lf", &number.value);
-    printResult(number.hexForm);
+    printExponentialForm(number.hexForm);
     return 0;
 }
