@@ -22,7 +22,6 @@ add_executable(hw2_task_2 homework_2/task_2.c)
 add_executable(test1_task_1 test_1/task_1.c)
 
 
-
 add_executable(hw3_task_2 homework_3/task_2.c)
 
 target_link_libraries(task_1 PRIVATE m)
