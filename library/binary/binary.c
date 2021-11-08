@@ -1,5 +1,4 @@
 #include "binary.h"
-#include "string.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -201,3 +200,4 @@ void printExponentialForm(unsigned char hex[8])
     free(shiftedOrder);
     free(mantissa);
 }
+

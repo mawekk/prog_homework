@@ -1,4 +1,4 @@
-#include "../library/vector.h"
+#include "../library/vector/vector.h"
 #include <stdio.h>
 
 void printValues(Vector* firstVector, Vector* secondVector, int size)
