@@ -1,7 +1,6 @@
 #include "binary.h"
 #include <math.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 #define BIT_DEPTH 8
 
