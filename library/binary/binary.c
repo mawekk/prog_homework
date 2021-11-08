@@ -101,3 +101,101 @@ void multiplyBinary(int* multiplied, int* multiplier, int* product)
 
     free(term);
 }
+
+void appendToBinary(int* end, int* binary, int position)
+{
+    int j = 0;
+    for (int i = position; i < position + 4; i++)
+        binary[i] = end[j++];
+}
+
+double convertFromBinaryToReal(int* binary, int length)
+{
+    double degree = 0.5;
+    double real = 0;
+    for (int i = 0; i < length; i++) {
+        real += binary[i] * degree;
+        degree = degree / 2;
+    }
+
+    return real;
+}
+
+int* convertPartToBinary(int originalNumber)
+{
+    int number = abs(originalNumber);
+    int i = 3;
+    int* binary = calloc(4, sizeof(int));
+
+    while (number > 0) {
+        binary[i] = number % 2;
+        i--;
+        number = number / 2;
+    }
+
+    if (originalNumber < 0) {
+        reverse(binary);
+        int* add = convertToBinary(1);
+        addBinary(add, binary, binary);
+        free(add);
+    }
+
+    return binary;
+}
+
+int calculateExponent(int* binary)
+{
+    int number = 0;
+    int degree = 1;
+
+    for (int i = 10; i >= 0; i--) {
+        number += binary[i] * degree;
+        degree = degree * 2;
+    }
+
+    return (number - 1023);
+}
+
+int* convertFromHexToBinary(unsigned char hex[8])
+{
+    int* binary = calloc(64, sizeof(int));
+    char hexString[17] = "";
+
+    for (int i = 7; i >= 0; --i) {
+        char buffer[3] = "";
+        sprintf(buffer, "%02X", hex[i]);
+        strcat(hexString, buffer);
+    }
+
+    int position = 0;
+    for (int i = 0; i < 16; i++) {
+        int number = (hexString[i] >= 'A' && hexString[i] <= 'F') ? 10 + hexString[i] - 'A' : hexString[i] - '0';
+        int* new = convertPartToBinary(number);
+        appendToBinary(new, binary, position);
+        position += 4;
+        free(new);
+    }
+
+    return binary;
+}
+
+void printExponentialForm(unsigned char hex[8])
+{
+    int* binary = convertFromHexToBinary(hex);
+
+    char sign = binary[0] ? '-' : '+';
+    int* shiftedOrder = calloc(11, sizeof(int));
+    for (int i = 1; i < 12; i++)
+        shiftedOrder[i - 1] = binary[i];
+    int exponent = calculateExponent(shiftedOrder);
+    int* mantissa = calloc(52, sizeof(int));
+    for (int i = 12; i < 64; i++)
+        mantissa[i - 12] = binary[i];
+    double real = 1 + convertFromBinaryToReal(mantissa, 52);
+
+    printf("Result: %c%.17lf * 2^%d\n", sign, real, exponent);
+
+    free(binary);
+    free(shiftedOrder);
+    free(mantissa);
+}
