@@ -86,7 +86,7 @@ void putKey(TreeMap* tree, Value key, Value value)
         tree->root->value = value;
 }
 
-/*Pair* findKey(Node* node, Value key)
+Pair* findKey(Node* node, Value key)
 {
     Pair* pair = malloc(sizeof(Pair));
     if (!node) {
@@ -113,4 +113,3 @@ bool hasKey(TreeMap* tree, Value key)
     else
         return true;
 }
-*/

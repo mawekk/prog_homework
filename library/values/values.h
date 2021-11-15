@@ -1,6 +1,5 @@
 #ifndef VALUES_H
 #define VALUES_H
-
 #include <stdbool.h>
 
 typedef enum ValueType {

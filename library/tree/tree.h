@@ -16,5 +16,4 @@ void putKey(TreeMap* tree, Value key, Value value);
 Pair removeKey(TreeMap* tree, Value key);
 bool hasKey(TreeMap* tree, Value key);
 
-
 #endif // TREE_H
