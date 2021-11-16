@@ -41,4 +41,3 @@ target_link_libraries(hw3_task_2 library)
 target_link_libraries(hw3_task_3 library)
 
 target_link_libraries(test1_task_1 library m)
-target_link_libraries(test2_task_2 library)

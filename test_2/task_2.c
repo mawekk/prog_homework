@@ -1,6 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../library/mergeSort/mergeSort.h"
+
+void mergeAndPrint(int* first, int* second, int firstSize, int secondSize)
+{
+    int* new = calloc(firstSize + secondSize, sizeof(int));
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    while (i < firstSize & j < secondSize) {
+        if (first[i] > second[j])
+            new[k++] = first[i++];
+        else
+            new[k++] = second[j++];
+    }
+    if (i == firstSize) {
+        while (j < secondSize)
+            new[k++] = second[j++];
+    } else {
+        while (i < firstSize)
+            new[k++] = first[i++];
+    }
+    printf("Sorted array:\n");
+    for (int i = 0; i < firstSize + secondSize; i++)
+        printf("%d ", new[i]);
+
+    free(new);
+}
 
 int main()
 {
@@ -18,18 +43,10 @@ int main()
     printf("Enter the elements of the second array:\n");
     for (int i = 0; i < secondNumber; i++)
         scanf("%d", &secondArray[i]);
-    int* newArray = calloc(firstNumber + secondNumber, sizeof(int));
-    for (int i = 0; i < firstNumber; i ++)
-        newArray[i] = firstArray[i];
-    for (int i = firstNumber; i < firstNumber + secondNumber; i ++)
-        newArray[i] = secondArray[i - firstNumber];
-    for (int i = 0; i < firstNumber + secondNumber; i++)
-        printf("%d ", newArray[i]);
-    printf("\n");
-    mergeSort(newArray, firstNumber + secondNumber);
-    for (int i = 0; i < firstNumber + secondNumber; i++)
-        printf("%d ", newArray[i]);
+    mergeAndPrint(firstArray, secondArray, firstNumber, secondNumber);
     free(firstArray);
     free(secondArray);
-    free(newArray);
+    return 0;
 }
+
+//Сложность алгоритма = О(n), n - количество элементов в двух массивах
