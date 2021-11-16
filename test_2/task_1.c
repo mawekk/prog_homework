@@ -3,9 +3,11 @@
 
 long long int calculateFibonacci(int number)
 {
-    long long int fibonacciPrevPrev = 1;
+    if (number == 0)
+        return 0;
+    long long int fibonacciPrevPrev = 0;
     long long int fibonacciPrev = 1;
-    long long int result = 0;
+    long long int result = 1;
     for (int i = 2; i < number + 1; i++) {
         result = fibonacciPrev + fibonacciPrevPrev;
         fibonacciPrevPrev = fibonacciPrev;
