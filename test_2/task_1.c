@@ -3,13 +3,15 @@
 
 long long int calculateFibonacci(int number)
 {
-    long long int* fibonacci = calloc(number + 1, sizeof(long long int));
-    fibonacci[0] = 1;
-    fibonacci[1] = 1;
+    long long int fibonacciPrevPrev = 1;
+    long long int fibonacciPrev = 1;
+    long long int result = 0;
     for (int i = 2; i < number + 1; i++)
-        fibonacci[i] = fibonacci[i - 1] + fibonacci[i - 2];
-    long long int result = fibonacci[number];
-    free(fibonacci);
+    {
+        result = fibonacciPrev + fibonacciPrevPrev;
+        fibonacciPrevPrev = fibonacciPrev;
+        fibonacciPrev = result;
+    }
     return result;
 }
 
