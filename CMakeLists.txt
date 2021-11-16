@@ -9,7 +9,6 @@ set(SOURCE_LIB
         library/list/list.c
         library/vector/vector.c
         library/binary/binary.c
-        library/mergeSort/mergeSort.c
         )
 add_library(library ${SOURCE_LIB})
 
