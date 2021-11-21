@@ -10,8 +10,6 @@ set(SOURCE_LIB
         library/list/list.c
         library/vector/vector.c
         library/binary/binary.c
-        library/values/values.c
-        library/tree/tree.c
         )
 add_library(library ${SOURCE_LIB})
 
@@ -31,8 +29,6 @@ add_executable(hw3_task_2 homework_3/task_2.c)
 add_executable(hw3_task_3 homework_3/task_3.c)
 
 add_executable(hw4_task_1 homework_4/task_1.c)
-
-add_executable(hw5_task_1 homework_5/task_1.c)
 
 add_executable(test2_task_1 test_2/task_1.c)
 add_executable(test2_task_2 test_2/task_2.c)
