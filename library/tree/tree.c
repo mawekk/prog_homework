@@ -44,44 +44,6 @@ Node* createNode(Value key, Value value)
     return node;
 }
 
-TreeMapIterator getIterator(TreeMap* tree)
-{
-    TreeMapIterator* iterator = malloc(sizeof(TreeMapIterator));
-    iterator->current = tree->root;
-    iterator->value = tree->root->value;
-    iterator->key = tree->root->key;
-}
-
-void next(TreeMapIterator* iterator)
-{
-    Node* node = iterator->current;
-    Node* next = NULL;
-    if (node->leftChild != NULL)
-        next = node->leftChild;
-    else if (node->rightChild != NULL)
-        next = node->rightChild;
-    else if (node->parent != NULL)
-        next = node->parent;
-    iterator->current = next;
-    if (next != NULL) {
-        iterator->value = iterator->current->value;
-        iterator->key = iterator->current->key;
-    } else {
-        iterator->value = wrapNone();
-        iterator->key = wrapNone();
-    }
-}
-
-Value getKey(TreeMapIterator* iterator)
-{
-    return iterator->key;
-}
-
-Value getValue(TreeMapIterator* iterator)
-{
-    return iterator->value;
-}
-
 void deleteTreeMap(TreeMap* tree)
 {
     free(tree->root);
@@ -99,7 +61,7 @@ int getBalanceFactor(Node* node)
 void updateHeight(Node* node)
 {
     if (node->parent != NULL) {
-        node->parent->height++;
+        ++node->parent->height;
         updateHeight(node->parent);
     }
 }
@@ -138,20 +100,20 @@ Node* balance(Node* root)
     return root;
 }
 
-void insert(Node* node, Value key, Value value, Comparator comparator)
+void insert(Node* parent, Node* node, Value key, Value value, Comparator comparator)
 {
     if (!node) {
         Node* newNode = createNode(key, value);
-        if (comparator(node->parent->key, key) == 1)
-            node->parent->leftChild = newNode;
+        if (comparator(parent->key, key) == 1)
+            parent->leftChild = newNode;
         else
-            node->parent->rightChild = newNode;
+            parent->rightChild = newNode;
         newNode->parent = node;
         updateHeight(newNode);
     } else if (comparator(node->key, key) == 1)
-        insert(node->leftChild, key, value, comparator);
+        insert(node, node->leftChild, key, value, comparator);
     else if (compare(node->key, key) == -1)
-        insert(node->rightChild, key, value, comparator);
+        insert(node, node->rightChild, key, value, comparator);
     else
         node->value = value;
 }
@@ -162,9 +124,9 @@ void putKeyInTree(TreeMap* tree, Value key, Value value)
         Node* node = createNode(key, value);
         tree->root = node;
     } else if (tree->comparator(tree->root->key, key) == 1)
-        insert(tree->root->leftChild, key, value, tree->comparator);
+        insert(tree->root, tree->root->leftChild, key, value, tree->comparator);
     else if (tree->comparator(tree->root->key, key) == -1)
-        insert(tree->root->rightChild, key, value, tree->comparator);
+        insert(tree->root, tree->root->rightChild, key, value, tree->comparator);
     else
         tree->root->value = value;
     tree->root = balance(tree->root);
@@ -179,27 +141,29 @@ Pair* findKey(Node* node, Value key, Comparator comparator)
         return pair;
     }
     if (comparator(node->key, key) == 1)
-        findKey(node->leftChild, key, comparator);
+        return findKey(node->leftChild, key, comparator);
     else if (comparator(node->key, key) == -1)
-        findKey(node->rightChild, key, comparator);
-    pair->key = key;
-    pair->value = node->value;
+        return findKey(node->rightChild, key, comparator);
+    else {
+        pair->key = key;
+        pair->value = node->value;
+    }
     return pair;
 }
 
 bool hasKeyInTree(TreeMap* tree, Value key)
 {
     Pair* pair = findKey(tree->root, key, tree->comparator);
-    if (pair->value.type == NONE_TYPE)
+    if (pair->key.type == NONE_TYPE)
         return false;
     else
         return true;
 }
 
-Value getKeyFromTree(TreeMap* tree, Value key)
+Pair* getKeyFromTree(TreeMap* tree, Value key)
 {
     Pair* pair = findKey(tree->root, key, tree->comparator);
-    return pair->value;
+    return pair;
 }
 
 Node* findMinimum(Node* node)
@@ -227,8 +191,9 @@ Node* removeKey(Node* node, Value key, Comparator comparator)
         Node* left = node->leftChild;
         Node* right = node->rightChild;
         free(node);
-        if (!right)
-            return left;
+        if (right == NULL)
+            ;
+        return left;
         Node* min = findMinimum(node);
         min->rightChild = removeMinimum(right);
         min->leftChild = left;
@@ -240,26 +205,85 @@ Node* removeKey(Node* node, Value key, Comparator comparator)
 void removeKeyFromTree(TreeMap* tree, Value key)
 {
     if (hasKeyInTree(tree, key))
-        removeKey(tree->root, key, tree->comparator);
+        tree->root = removeKey(tree->root, key, tree->comparator);
 }
 
-Value getLower(Node* node, Value key, Comparator comparator)
+Node* findLowerBound(Node* parent, Node* root, Value key, Comparator comparator)
 {
-    if (comparator(node->key, key) == 0)
-        return node->key;
-    else if (node->leftChild != NULL) {
-        if (node->rightChild != NULL) {
-        }
-    }
+    Node* bound = NULL;
+    if (!root)
+        if (!parent)
+            return root;
+        else
+            return parent;
+    if (comparator(root->key, key) == 1) {
+        bound = findLowerBound(root, root->leftChild, key, comparator);
+        if (comparator(bound->key, key) == -1 || comparator(bound->key, root->key) == 1)
+            bound = root;
+    } else if (comparator(root->key, key) == -1) {
+        bound = findLowerBound(root, root->rightChild, key, comparator);
+        if (comparator(bound->key, key) == -1)
+            bound = parent;
+    } else
+        bound = root;
+    return bound;
 }
 
 Value getLowerBound(TreeMap* tree, Value key)
 {
+    Node* bound = findLowerBound(NULL, tree->root, key, tree->comparator);
+    if (bound != NULL)
+        return bound->key;
+    else
+        return wrapNone();
+}
+
+TreeMapIterator getIterator(TreeMap* tree)
+{
+    Node* current = findMinimum(tree->root);
+    TreeMapIterator iterator = { current, current->value, current->key };
+    return iterator;
+}
+
+void next(TreeMapIterator iterator)
+{
+    Node* node = iterator.current;
+    Node* next = NULL;
+    if (node->rightChild)
+        next = findMinimum(node->rightChild);
+    else {
+        while (node->parent != NULL && node->parent->leftChild != node)
+            node = node->parent;
+        next = node->parent;
+    }
+    iterator.current = next;
+    if (next) {
+        iterator.value = next->value;
+        iterator.key = next->key;
+    } else {
+        iterator.value = wrapNone();
+        iterator.key = wrapNone();
+    }
+}
+
+Value getKey(TreeMapIterator iterator)
+{
+    return iterator.key;
+}
+
+Value getValue(TreeMapIterator iterator)
+{
+    return iterator.value;
 }
 
 void printInFile(TreeMap* tree, FILE* file)
 {
-    int value = tree->root->value.intValue;
-    printf("%d\n", value);
-    fprintf(file, "%d", value);
+    TreeMapIterator iterator = getIterator(tree);
+    Node* current = iterator.current;
+    while (true) {
+        fprintf(file, "%d %d", getInt(iterator.current->key), getInt(iterator.current->value));
+        next(iterator);
+        if (iterator.current == NULL)
+            break;
+    }
 }

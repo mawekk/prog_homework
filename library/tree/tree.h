@@ -17,14 +17,14 @@ void deleteTreeMap(TreeMap* tree);
 void putKeyInTree(TreeMap* tree, Value key, Value value);
 void removeKeyFromTree(TreeMap* tree, Value key);
 bool hasKeyInTree(TreeMap* tree, Value key);
-Value getKeyFromTree(TreeMap* tree, Value key);
+Pair* getKeyFromTree(TreeMap* tree, Value key);
 Value getLowerBound(TreeMap* tree, Value key);
 Value getUpperBound(TreeMap* tree, Value key);
 
 TreeMapIterator getIterator(TreeMap* tree);
-void next(TreeMapIterator* iterator);
-Value getKey(TreeMapIterator* iterator);
-Value getValue(TreeMapIterator* iterator);
+void next(TreeMapIterator iterator);
+Value getKey(TreeMapIterator iterator);
+Value getValue(TreeMapIterator iterator);
 
 void printInFile(TreeMap* tree, FILE* file);
 
