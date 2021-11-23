@@ -19,7 +19,7 @@ void readFile(FILE* inputFile, FILE* outputFile, FILE* resultFile)
         int count = 0;
         fscanf(inputFile, "%s", &log);
         fscanf(inputFile, "%d", &size);
-        printf("%s %d\n", log, size);
+        printf("%d %s %d\n", i, log, size);
         Value key = wrapInt(size);
         if (!strcmp(log, "ADD")) {
             fscanf(inputFile, "%d", &count);
@@ -40,16 +40,19 @@ void readFile(FILE* inputFile, FILE* outputFile, FILE* resultFile)
                 printf("%d %d %d\n", key.intValue, size.intValue, pair->value.intValue);
                 fprintf(outputFile, "%d\n", getInt(pair->key));
                 putKeyInTree(tree, size, wrapInt(getInt(pair->value) - 1));
-                pair = getKeyFromTree(tree, size);
                 printf("%d\n", pair->value.intValue);
-                if (pair->value.intValue == 0) {
+                if (pair->value.intValue - 1 <= 0) {
+                    if (i == 56)
+                        removeKeyFromTree(tree, pair->key);
+                    else
+                        removeKeyFromTree(tree, pair->key);
                     printf("del\n");
-                    removeKeyFromTree(tree, pair->key);
+                    printf("%d\n", hasKeyInTree(tree, pair->key));
                 }
             }
         }
     }
-    //printInFile(tree, resultFile);
+    // printInFile(tree, resultFile);
 }
 
 int main(int argc, char* argv[])

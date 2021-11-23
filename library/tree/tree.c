@@ -61,7 +61,7 @@ int getBalanceFactor(Node* node)
 void updateHeight(Node* node)
 {
     if (node->parent != NULL) {
-        ++node->parent->height;
+        node->parent->height = node->height + 1;
         updateHeight(node->parent);
     }
 }
@@ -71,6 +71,7 @@ Node* rotateRight(Node* root)
     Node* child = root->leftChild;
     root->leftChild = child->rightChild;
     child->rightChild = root;
+    updateHeight(root);
     updateHeight(child);
     return child;
 }
@@ -80,6 +81,7 @@ Node* rotateLeft(Node* root)
     Node* child = root->rightChild;
     root->rightChild = child->leftChild;
     child->leftChild = root;
+    updateHeight(root);
     updateHeight(child);
     return child;
 }
@@ -181,22 +183,28 @@ Node* removeMinimum(Node* node)
     return balance(node);
 }
 
-Node* removeKey(Node* node, Value key, Comparator comparator)
+Node* removeKey(Node* parent, Node* node, Value key, Comparator comparator)
 {
     if (comparator(node->key, key) == -1)
-        node->leftChild = removeKey(node->leftChild, key, comparator);
+        node->leftChild = removeKey(node, node->leftChild, key, comparator);
     else if (comparator(node->key, key) == -1)
-        node->rightChild = removeKey(node->rightChild, key, comparator);
+        node->rightChild = removeKey(node, node->rightChild, key, comparator);
     else {
         Node* left = node->leftChild;
         Node* right = node->rightChild;
         free(node);
-        if (right == NULL)
-            ;
-        return left;
-        Node* min = findMinimum(node);
+        if (right == NULL && left == NULL)
+            return NULL;
+        if (right == NULL) {
+            left->parent = parent;
+            return left;
+        }
+        Node* min = findMinimum(right);
         min->rightChild = removeMinimum(right);
+        if (min->rightChild != NULL)
+            min->rightChild->parent = min;
         min->leftChild = left;
+        min->leftChild->parent = min;
         return balance(min);
     }
     return balance(node);
@@ -205,7 +213,7 @@ Node* removeKey(Node* node, Value key, Comparator comparator)
 void removeKeyFromTree(TreeMap* tree, Value key)
 {
     if (hasKeyInTree(tree, key))
-        tree->root = removeKey(tree->root, key, tree->comparator);
+        tree->root = removeKey(NULL, tree->root, key, tree->comparator);
 }
 
 Node* findLowerBound(Node* parent, Node* root, Value key, Comparator comparator)
