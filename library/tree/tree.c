@@ -110,11 +110,11 @@ void insert(Node* parent, Node* node, Value key, Value value, Comparator compara
             parent->leftChild = newNode;
         else
             parent->rightChild = newNode;
-        newNode->parent = node;
+        newNode->parent = parent;
         updateHeight(newNode);
     } else if (comparator(node->key, key) == 1)
         insert(node, node->leftChild, key, value, comparator);
-    else if (compare(node->key, key) == -1)
+    else if (comparator(node->key, key) == -1)
         insert(node, node->rightChild, key, value, comparator);
     else
         node->value = value;
@@ -187,7 +187,7 @@ Node* removeKey(Node* parent, Node* node, Value key, Comparator comparator)
 {
     if (comparator(node->key, key) == -1)
         node->leftChild = removeKey(node, node->leftChild, key, comparator);
-    else if (comparator(node->key, key) == -1)
+    else if (comparator(node->key, key) == 1)
         node->rightChild = removeKey(node, node->rightChild, key, comparator);
     else {
         Node* left = node->leftChild;
@@ -253,24 +253,31 @@ TreeMapIterator getIterator(TreeMap* tree)
     return iterator;
 }
 
-void next(TreeMapIterator iterator)
+void next(TreeMapIterator* iterator)
 {
-    Node* node = iterator.current;
+    Node* node = iterator->current;
     Node* next = NULL;
     if (node->rightChild)
         next = findMinimum(node->rightChild);
-    else {
-        while (node->parent != NULL && node->parent->leftChild != node)
+    else
+        while (true) {
+            if (node->parent == NULL) {
+                next = NULL;
+                break;
+            }
+            if (node->parent->leftChild == node) {
+                next = node->parent;
+                break;
+            }
             node = node->parent;
-        next = node->parent;
-    }
-    iterator.current = next;
+        }
+    iterator->current = next;
     if (next) {
-        iterator.value = next->value;
-        iterator.key = next->key;
+        iterator->value = next->value;
+        iterator->key = next->key;
     } else {
-        iterator.value = wrapNone();
-        iterator.key = wrapNone();
+        iterator->value = wrapNone();
+        iterator->key = wrapNone();
     }
 }
 
@@ -286,12 +293,13 @@ Value getValue(TreeMapIterator iterator)
 
 void printInFile(TreeMap* tree, FILE* file)
 {
-    TreeMapIterator iterator = getIterator(tree);
-    Node* current = iterator.current;
-    while (true) {
-        fprintf(file, "%d %d", getInt(iterator.current->key), getInt(iterator.current->value));
-        next(iterator);
-        if (iterator.current == NULL)
-            break;
+    if (tree->root != NULL) {
+        TreeMapIterator iterator = getIterator(tree);
+        while (true) {
+            fprintf(file, "%d %d\n", getInt(iterator.current->key), getInt(iterator.current->value));
+            next(&iterator);
+            if (iterator.current == NULL)
+                break;
+        }
     }
 }

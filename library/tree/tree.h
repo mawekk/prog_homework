@@ -22,7 +22,7 @@ Value getLowerBound(TreeMap* tree, Value key);
 Value getUpperBound(TreeMap* tree, Value key);
 
 TreeMapIterator getIterator(TreeMap* tree);
-void next(TreeMapIterator iterator);
+void next(TreeMapIterator* iterator);
 Value getKey(TreeMapIterator iterator);
 Value getValue(TreeMapIterator iterator);
 

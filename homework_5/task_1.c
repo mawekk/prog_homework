@@ -24,6 +24,10 @@ void readFile(FILE* inputFile, FILE* outputFile, FILE* resultFile)
         if (!strcmp(log, "ADD")) {
             fscanf(inputFile, "%d", &count);
             Value value = wrapInt(count);
+            if (hasKeyInTree(tree, key)) {
+                Pair* pair = getKeyFromTree(tree, key);
+                value = wrapInt(count + getInt(pair->value));
+            }
             putKeyInTree(tree, key, value);
         } else if (!strcmp(log, "GET")) {
             if (hasKeyInTree(tree, key)) {
@@ -32,27 +36,24 @@ void readFile(FILE* inputFile, FILE* outputFile, FILE* resultFile)
             } else
                 fprintf(outputFile, "0\n");
         } else if (!strcmp(log, "SELECT")) {
-            Value size = getLowerBound(tree, key);
-            if (size.type == NONE_TYPE)
+            Value sizeValue = getLowerBound(tree, key);
+            if (sizeValue.type == NONE_TYPE)
                 fprintf(outputFile, "SORRY\n");
             else {
-                Pair* pair = getKeyFromTree(tree, size);
-                printf("%d %d %d\n", key.intValue, size.intValue, pair->value.intValue);
+                Pair* pair = getKeyFromTree(tree, sizeValue);
+                printf("%d %d %d\n", key.intValue, sizeValue.intValue, pair->value.intValue);
                 fprintf(outputFile, "%d\n", getInt(pair->key));
-                putKeyInTree(tree, size, wrapInt(getInt(pair->value) - 1));
+                putKeyInTree(tree, sizeValue, wrapInt(getInt(pair->value) - 1));
                 printf("%d\n", pair->value.intValue);
                 if (pair->value.intValue - 1 <= 0) {
-                    if (i == 56)
-                        removeKeyFromTree(tree, pair->key);
-                    else
-                        removeKeyFromTree(tree, pair->key);
+                    removeKeyFromTree(tree, pair->key);
                     printf("del\n");
                     printf("%d\n", hasKeyInTree(tree, pair->key));
                 }
             }
         }
     }
-    // printInFile(tree, resultFile);
+    printInFile(tree, resultFile);
 }
 
 int main(int argc, char* argv[])
