@@ -314,4 +314,3 @@ Value getValue(TreeMapIterator iterator)
 {
     return iterator.value;
 }
-

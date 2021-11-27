@@ -6,7 +6,7 @@
 
 typedef struct Node Node;
 typedef struct TreeMap TreeMap;
-typedef struct TreeMapIterator  {
+typedef struct TreeMapIterator {
     Node* current;
     Value key;
     Value value;
