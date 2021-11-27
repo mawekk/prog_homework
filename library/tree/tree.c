@@ -16,12 +16,6 @@ struct TreeMap {
     ValueType keyType;
 };
 
-struct TreeMapIterator {
-    Node* current;
-    Value key;
-    Value value;
-};
-
 TreeMap* createTreeMap(Comparator comparator)
 {
     TreeMap* newTree = malloc(sizeof(TreeMap));
@@ -37,31 +31,49 @@ Node* createNode(Value key, Value value)
     Node* node = malloc(sizeof(Node));
     node->value = value;
     node->key = key;
-    node->height = 0;
+    node->height = 1;
     node->leftChild = NULL;
     node->rightChild = NULL;
     node->parent = NULL;
     return node;
 }
 
+void deleteNode(Node* node)
+{
+    if (node) {
+        deleteNode(node->leftChild);
+        deleteNode(node->rightChild);
+        free(node);
+    }
+}
+
 void deleteTreeMap(TreeMap* tree)
 {
-    free(tree->root);
+    deleteNode(tree->root);
     free(tree);
 }
 
 int getBalanceFactor(Node* node)
 {
-    if (node->leftChild && node->rightChild)
-        return node->rightChild->height - node->leftChild->height;
-    else
-        return 0;
+    int leftHeight = 0;
+    int rightHeight = 0;
+    if (node->leftChild)
+        leftHeight = node->leftChild->height;
+    if (node->rightChild)
+        rightHeight = node->rightChild->height;
+    return rightHeight - leftHeight;
 }
 
 void updateHeight(Node* node)
 {
-    if (node->parent != NULL) {
-        node->parent->height = node->height + 1;
+    if (node) {
+        int leftHeight = 0;
+        int rightHeight = 0;
+        if (node->leftChild)
+            leftHeight = node->leftChild->height;
+        if (node->rightChild)
+            rightHeight = node->rightChild->height;
+        node->height = (leftHeight > rightHeight ? leftHeight : rightHeight) + 1;
         updateHeight(node->parent);
     }
 }
@@ -69,8 +81,13 @@ void updateHeight(Node* node)
 Node* rotateRight(Node* root)
 {
     Node* child = root->leftChild;
+    child->parent = root->parent;
     root->leftChild = child->rightChild;
+    if (root->leftChild)
+        root->leftChild->parent = root;
     child->rightChild = root;
+    if (child->rightChild)
+        child->rightChild->parent = child;
     updateHeight(root);
     updateHeight(child);
     return child;
@@ -79,8 +96,13 @@ Node* rotateRight(Node* root)
 Node* rotateLeft(Node* root)
 {
     Node* child = root->rightChild;
+    child->parent = root->parent;
     root->rightChild = child->leftChild;
+    if (root->rightChild)
+        root->rightChild->parent = root;
     child->leftChild = root;
+    if (child->leftChild)
+        child->leftChild->parent = child;
     updateHeight(root);
     updateHeight(child);
     return child;
@@ -185,14 +207,13 @@ Node* removeMinimum(Node* node)
 
 Node* removeKey(Node* parent, Node* node, Value key, Comparator comparator)
 {
-    if (comparator(node->key, key) == -1)
+    if (comparator(node->key, key) == 1)
         node->leftChild = removeKey(node, node->leftChild, key, comparator);
-    else if (comparator(node->key, key) == 1)
+    else if (comparator(node->key, key) == -1)
         node->rightChild = removeKey(node, node->rightChild, key, comparator);
     else {
         Node* left = node->leftChild;
         Node* right = node->rightChild;
-        free(node);
         if (right == NULL && left == NULL)
             return NULL;
         if (right == NULL) {
@@ -201,10 +222,13 @@ Node* removeKey(Node* parent, Node* node, Value key, Comparator comparator)
         }
         Node* min = findMinimum(right);
         min->rightChild = removeMinimum(right);
-        if (min->rightChild != NULL)
+        if (min->rightChild)
             min->rightChild->parent = min;
         min->leftChild = left;
-        min->leftChild->parent = min;
+        if (min->leftChild)
+            min->leftChild->parent = min;
+        min->parent = node->parent;
+        free(node);
         return balance(min);
     }
     return balance(node);
@@ -291,15 +315,3 @@ Value getValue(TreeMapIterator iterator)
     return iterator.value;
 }
 
-void printInFile(TreeMap* tree, FILE* file)
-{
-    if (tree->root != NULL) {
-        TreeMapIterator iterator = getIterator(tree);
-        while (true) {
-            fprintf(file, "%d %d\n", getInt(iterator.current->key), getInt(iterator.current->value));
-            next(&iterator);
-            if (iterator.current == NULL)
-                break;
-        }
-    }
-}
