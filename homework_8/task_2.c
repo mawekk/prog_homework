@@ -35,5 +35,7 @@ int main()
         printf("This is a number! :)\n");
     else
         printf("This isn't a number :(\n");
+
+    freeDFA(dfa);
     return error;
 }

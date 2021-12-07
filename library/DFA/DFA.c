@@ -42,17 +42,17 @@ DFA* createDFA(int nTransitions, Transition* transitions, int nAcceptStates, int
     return dfa;
 }
 
-int move(int current, char symbol, Transition* transitions, int nTransitions, int* error)
+int move(int current, char symbol, Transition* transitions, int nTransitions, int** error)
 {
     for (int i = 0; i < nTransitions; i++) {
         if (strchr(transitions[i].alphabet, symbol)) {
             if (transitions[i].from == current)
                 return transitions[i].to;
-            *error = 0;
+            **error = 0;
         } else
-            *error = ALPHABET_ERROR;
+            **error = ALPHABET_ERROR;
     }
-    return *error;
+    return **error;
 }
 
 bool isStringAccept(DFA* dfa, char* string, int* error)
@@ -60,7 +60,7 @@ bool isStringAccept(DFA* dfa, char* string, int* error)
     int current = dfa->start;
     int position = 0;
     while (string[position]) {
-        current = move(current, string[position], dfa->transitions, dfa->nTransitions, error);
+        current = move(current, string[position], dfa->transitions, dfa->nTransitions, &error);
         if (current == ALPHABET_ERROR)
             return false;
         ++position;
@@ -70,4 +70,10 @@ bool isStringAccept(DFA* dfa, char* string, int* error)
             return true;
     }
     return false;
+}
+
+void freeDFA(DFA* dfa)
+{
+    free(dfa->transitions);
+    free(dfa);
 }

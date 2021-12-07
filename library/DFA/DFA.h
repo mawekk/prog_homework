@@ -11,5 +11,6 @@ Transition* createTransitions(int number);
 void addTransition(Transition* transitions, int from, int to, char* alphabet);
 DFA* createDFA(int nTransitions, Transition* transitions, int nAcceptStates, int* acceptStates, int start);
 bool isStringAccept(DFA* dfa, char* string, int* error);
+void freeDFA(DFA* dfa);
 
 #endif // DFA_H
