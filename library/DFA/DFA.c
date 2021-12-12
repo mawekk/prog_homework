@@ -46,9 +46,9 @@ int move(int current, char symbol, Transition* transitions, int nTransitions, in
 {
     for (int i = 0; i < nTransitions; i++) {
         if (strchr(transitions[i].alphabet, symbol)) {
+            **error = 0;
             if (transitions[i].from == current)
                 return transitions[i].to;
-            **error = 0;
         } else
             **error = ALPHABET_ERROR;
     }
@@ -61,7 +61,7 @@ bool isStringAccept(DFA* dfa, char* string, int* error)
     int position = 0;
     while (string[position]) {
         current = move(current, string[position], dfa->transitions, dfa->nTransitions, &error);
-        if (current == ALPHABET_ERROR)
+        if (*error == ALPHABET_ERROR)
             return false;
         ++position;
     }
