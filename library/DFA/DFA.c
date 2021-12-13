@@ -52,7 +52,7 @@ int move(int current, char symbol, Transition* transitions, int nTransitions, in
         } else
             **error = ALPHABET_ERROR;
     }
-    return **error;
+    return ALPHABET_ERROR;
 }
 
 bool isStringAccept(DFA* dfa, char* string, int* error)
@@ -61,14 +61,17 @@ bool isStringAccept(DFA* dfa, char* string, int* error)
     int position = 0;
     while (string[position]) {
         current = move(current, string[position], dfa->transitions, dfa->nTransitions, &error);
-        if (*error == ALPHABET_ERROR)
+        if (*error == ALPHABET_ERROR) {
             return false;
+        }
+        *error = 0;
         ++position;
     }
     for (int i = 0; i < dfa->nAcceptStates; i++) {
         if (current == dfa->acceptStates[i])
             return true;
     }
+    *error = INCORRECT_STATE;
     return false;
 }
 

@@ -33,8 +33,13 @@ int main()
     scanf("%s", string);
     if (isStringAccept(dfa, string, &error))
         printf("This is a number! :)\n");
-    else
+    else {
         printf("This isn't a number :(\n");
+        if (error == ALPHABET_ERROR)
+            printf("Symbol(-s) do(-es)n't belong to the alphabet\n");
+        else
+            printf("The automaton finished working in the incorrect state\n");
+    }
 
     freeDFA(dfa);
     return error;

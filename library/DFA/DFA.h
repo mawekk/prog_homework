@@ -3,6 +3,7 @@
 #include <stdbool.h>
 
 #define ALPHABET_ERROR -1
+#define INCORRECT_STATE -2
 
 typedef struct DFA DFA;
 typedef struct Transition Transition;
