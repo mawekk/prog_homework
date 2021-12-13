@@ -68,8 +68,10 @@ bool isStringAccept(DFA* dfa, char* string, int* error)
         ++position;
     }
     for (int i = 0; i < dfa->nAcceptStates; i++) {
-        if (current == dfa->acceptStates[i])
+        if (current == dfa->acceptStates[i]) {
+            *error = 0;
             return true;
+        }
     }
     *error = INCORRECT_STATE;
     return false;
