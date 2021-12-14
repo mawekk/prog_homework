@@ -11,7 +11,7 @@ void readFile(FILE* fileName, int* letters)
 {
     char symbol = fgetc(fileName);
     while (symbol != EOF) {
-        if (symbol >= 97 && symbol <=122)
+        if (symbol >= 97 && symbol <= 122)
             letters[symbol - 97] += 1;
         symbol = fgetc(fileName);
     }
