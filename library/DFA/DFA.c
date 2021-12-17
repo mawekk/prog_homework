@@ -1,6 +1,6 @@
 #include "DFA.h"
 #include "strings.h"
-#include <malloc.h>
+#include <stdlib.h>
 
 struct Transition {
     int from;
