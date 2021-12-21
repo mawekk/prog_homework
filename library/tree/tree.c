@@ -70,7 +70,6 @@ void updateHeight(Node* node)
         if (node->rightChild)
             rightHeight = node->rightChild->height;
         node->height = (leftHeight > rightHeight ? leftHeight : rightHeight) + 1;
-        updateHeight(node->parent);
     }
 }
 
@@ -79,11 +78,10 @@ Node* rotateRight(Node* root)
     Node* child = root->leftChild;
     child->parent = root->parent;
     root->leftChild = child->rightChild;
+    child->rightChild = root;
+    root->parent = child;
     if (root->leftChild)
         root->leftChild->parent = root;
-    child->rightChild = root;
-    if (child->rightChild)
-        child->rightChild->parent = child;
     updateHeight(root);
     updateHeight(child);
     return child;
@@ -94,11 +92,10 @@ Node* rotateLeft(Node* root)
     Node* child = root->rightChild;
     child->parent = root->parent;
     root->rightChild = child->leftChild;
+    child->leftChild = root;
+    root->parent = child;
     if (root->rightChild)
         root->rightChild->parent = root;
-    child->leftChild = root;
-    if (child->leftChild)
-        child->leftChild->parent = child;
     updateHeight(root);
     updateHeight(child);
     return child;
@@ -123,20 +120,19 @@ Node* balance(Node* root)
 void insert(Node* parent, Node* node, Value key, Value value, Comparator comparator)
 {
     if (!node) {
-        Node* newNode = createNode(key, value);
+        node = createNode(key, value);
         if (comparator(parent->key, key) == 1)
-            parent->leftChild = newNode;
+            parent->leftChild = node;
         else
-            parent->rightChild = newNode;
-        newNode->parent = parent;
-        updateHeight(newNode);
-        newNode = balance(newNode);
-    } else if (comparator(node->key, key) == 1)
+            parent->rightChild = node;
+        node->parent = parent;
+    } else if (comparator(node->key, key) == 1) {
         insert(node, node->leftChild, key, value, comparator);
-    else if (comparator(node->key, key) == -1)
+    } else if (comparator(node->key, key) == -1) {
         insert(node, node->rightChild, key, value, comparator);
-    else
+    } else
         node->value = value;
+    // node = balance(node);
 }
 
 void putKeyInTree(TreeMap* tree, Value key, Value value)
@@ -209,11 +205,11 @@ Node* removeKey(Node* node, Value key, Comparator comparator)
     else {
         Node* left = node->leftChild;
         Node* right = node->rightChild;
-        if (right == NULL && left == NULL) {
+        if (!right && !left) {
             free(node);
             return NULL;
         }
-        if (right == NULL) {
+        if (!right) {
             left->parent = node->parent;
             free(node);
             return left;
@@ -241,11 +237,12 @@ void removeKeyFromTree(TreeMap* tree, Value key)
 Node* findLowerBound(Node* parent, Node* root, Value key, Comparator comparator)
 {
     Node* bound = NULL;
-    if (!root)
+    if (!root) {
         if (!parent)
             return root;
         else
             return parent;
+    }
     if (comparator(root->key, key) == 1) {
         bound = findLowerBound(root, root->leftChild, key, comparator);
         if (comparator(bound->key, key) == -1)
