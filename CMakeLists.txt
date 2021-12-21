@@ -38,6 +38,8 @@ add_executable(retest1_task_1 retest_1/task_1.c)
 add_executable(retest1_task_2 retest_1/task_2.c)
 add_executable(retest1_task_3 retest_1/task_3.c)
 
+add_executable(final_task_2 final/task_2.c)
+
 target_link_libraries(task_1 PRIVATE m)
 target_link_libraries(task_4 PRIVATE m)
 
