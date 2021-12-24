@@ -2,6 +2,7 @@
 #define MAP_H
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct LinkedMap LinkedMap;
 typedef struct MapElement MapElement;
@@ -13,5 +14,7 @@ void put(LinkedMap* map, const char* key, int value);
 int get(LinkedMap* map, const char* key);
 void printMap(LinkedMap* map, FILE* fileName);
 void freeMap(LinkedMap* map);
+void sortMap(LinkedMap* map);
+int getMapSize(LinkedMap* map);
 
 #endif
