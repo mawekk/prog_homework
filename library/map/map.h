@@ -14,7 +14,6 @@ void put(LinkedMap* map, const char* key, int value);
 int get(LinkedMap* map, const char* key);
 void printMap(LinkedMap* map, FILE* fileName);
 void freeMap(LinkedMap* map);
-void sortMap(LinkedMap* map);
 int getMapSize(LinkedMap* map);
 
 #endif

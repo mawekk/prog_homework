@@ -79,20 +79,6 @@ void freeMap(LinkedMap* map)
     free(map);
 }
 
-void sortMap(LinkedMap* map)
-{
-    for (int i = 0; i < map->mapSize; i++) {
-        MapElement* current = map->tail;
-        for (int j = 0; j < map->mapSize - i; j++) {
-            if (current->key < current->previousElement->key) {
-                char* key = current->key;
-                current->key = current->previousElement->key;
-                current->previousElement->key = key;
-            }
-        }
-    }
-}
-
 int getMapSize(LinkedMap* map)
 {
     return map->mapSize;

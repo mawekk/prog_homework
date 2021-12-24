@@ -1,22 +1,27 @@
-#include "../library/map/map.h"
-
-int compare(const void* i, const void* j)
-{
-    return *(int*)i - *(int*)j;
-}
+#include "../library/tree/tree.h"
+#include "strings.h"
 
 bool isFileExist(FILE* fileName)
 {
     return (fileName != NULL);
 }
 
-void readFile(FILE* file, LinkedMap* map)
+void readFile(FILE* file, TreeMap* map)
 {
     char word[128] = "";
     while (fscanf(file, "%s", word) != EOF) {
-        put(map, word, 1);
+        putKeyInTree(map, wrapString(strdup(word)), wrapNone());
     }
-    sortMap(map);
+}
+
+void createOutputFile(TreeMap* map)
+{
+    FILE* output = fopen("output.txt", "w");
+    for (TreeMapIterator iterator = getIterator(map); getKey(iterator).type != NONE_TYPE; next(&iterator)) {
+        fprintf(output, "%s\n", getString(getKey(iterator)));
+        free(iterator.key.stringValue);
+    }
+    fclose(output);
 }
 
 int main(int argc, char* argv[])
@@ -27,8 +32,10 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    FILE* output = fopen("output.txt", "w");
-    LinkedMap* map = makeNewMap();
+    TreeMap* map = createTreeMap(compare);
     readFile(input, map);
+    createOutputFile(map);
+    deleteTreeMap(map);
+    fclose(input);
     return 0;
 }

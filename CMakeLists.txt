@@ -11,6 +11,8 @@ set(SOURCE_LIB
         library/binary/binary.c
         library/DFA/DFA.c
         library/complexNumber/complexNumber.c
+        library/tree/tree.c
+        library/values/values.c
         )
 add_library(library ${SOURCE_LIB})
 
