@@ -21,6 +21,7 @@ int* findAchievable(int** matrix, int nVertexes, int nEdges)
     for (int i = 0; i < nVertexes; i++) {
         bool* used = calloc(nVertexes, sizeof(bool));
         dfs(matrix, i, achievable, used, nVertexes, nEdges);
+        free(used);
     }
     return achievable;
 }
