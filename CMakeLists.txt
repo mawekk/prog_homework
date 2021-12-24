@@ -11,6 +11,7 @@ set(SOURCE_LIB
         library/binary/binary.c
         library/DFA/DFA.c
         library/complexNumber/complexNumber.c
+        library/linkedMap/linkedMap.c
         )
 add_library(library ${SOURCE_LIB})
 
@@ -38,6 +39,8 @@ add_executable(retest1_task_1 retest_1/task_1.c)
 add_executable(retest1_task_2 retest_1/task_2.c)
 add_executable(retest1_task_3 retest_1/task_3.c)
 
+add_executable(final2_task_1 final2/task_1.c)
+
 target_link_libraries(task_1 PRIVATE m)
 target_link_libraries(task_4 PRIVATE m)
 
@@ -53,3 +56,5 @@ target_link_libraries(test1_task_1 library m)
 target_link_libraries(hw8_task_2 library)
 
 target_link_libraries(retest1_task_1 library m)
+
+target_link_libraries(final2_task_1 library)
