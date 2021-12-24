@@ -2,15 +2,14 @@
 #include "stdio.h"
 #include <stdlib.h>
 
-void dfs(int** matrix, int vertex, bool* used, int* achievable, int nVertexes, int nEdges)
+void dfs(int** matrix, int vertex, int* achievable, int nVertexes, int nEdges)
 {
-    // used[vertex] = true;
     for (int j = 0; j < nEdges; j++) {
         if (matrix[vertex][j] > 0)
             for (int i = 0; i < nVertexes; i++)
-                if (matrix[i][j] < 0 && !used[i]) {
+                if (matrix[i][j] < 0) {
                     achievable[i] += 1;
-                    dfs(matrix, i, used, achievable, nVertexes, nEdges);
+                    dfs(matrix, i, achievable, nVertexes, nEdges);
                 }
     }
 }
@@ -18,11 +17,9 @@ void dfs(int** matrix, int vertex, bool* used, int* achievable, int nVertexes, i
 int* findAchievable(int** matrix, int nVertexes, int nEdges)
 {
     int* achievable = calloc(nVertexes, sizeof(int));
-    bool* used = calloc(nVertexes, sizeof(bool));
     for (int i = 0; i < nVertexes; i++)
-        dfs(matrix, i, used, achievable, nVertexes, nEdges);
+        dfs(matrix, i, achievable, nVertexes, nEdges);
 
-    free(used);
     return achievable;
 }
 
@@ -44,6 +41,7 @@ int main()
             scanf("%d", &matrix[i][j]);
     }
 
+    printf("Achievable vertexes:\n");
     int* achievable = findAchievable(matrix, nVertexes, nEdges);
     for (int i = 0; i < nVertexes; i++) {
         if (achievable[i] >= nVertexes - 1)
