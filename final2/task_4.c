@@ -2,14 +2,15 @@
 #include "stdio.h"
 #include <stdlib.h>
 
-void dfs(int** matrix, int vertex, int* achievable, int nVertexes, int nEdges)
+void dfs(int** matrix, int vertex, int* achievable, bool* used, int nVertexes, int nEdges)
 {
+    used[vertex] = true;
     for (int j = 0; j < nEdges; j++) {
         if (matrix[vertex][j] > 0)
             for (int i = 0; i < nVertexes; i++)
-                if (matrix[i][j] < 0) {
+                if (matrix[i][j] < 0 && !used[i]) {
                     achievable[i] += 1;
-                    dfs(matrix, i, achievable, nVertexes, nEdges);
+                    dfs(matrix, i, achievable, used, nVertexes, nEdges);
                 }
     }
 }
@@ -17,9 +18,10 @@ void dfs(int** matrix, int vertex, int* achievable, int nVertexes, int nEdges)
 int* findAchievable(int** matrix, int nVertexes, int nEdges)
 {
     int* achievable = calloc(nVertexes, sizeof(int));
-    for (int i = 0; i < nVertexes; i++)
-        dfs(matrix, i, achievable, nVertexes, nEdges);
-
+    for (int i = 0; i < nVertexes; i++) {
+        bool* used = calloc(nVertexes, sizeof(bool));
+        dfs(matrix, i, achievable, used, nVertexes, nEdges);
+    }
     return achievable;
 }
 
