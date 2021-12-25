@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define INFINITY 1000000
+#define NONE_PARENT -1
+
 void printInFile(FILE* file, int* array)
 {
     fprintf(file, "%d %d\n", array[0], array[1]);
@@ -14,10 +17,9 @@ void findShortestPath(int nVertex, int** matrix, int start, int end, FILE* file)
     int* lengths = calloc(nVertex, sizeof(int));
     bool* used = calloc(nVertex, sizeof(bool));
     int* parents = calloc(nVertex, sizeof(int));
-    for (int i = 0; i < nVertex; i++)
-        parents[i] = -1;
     for (int i = 0; i < nVertex; i++) {
-        lengths[i] = 1000000;
+        parents[i] = NONE_PARENT;
+        lengths[i] = INFINITY;
         used[i] = 0;
     }
     lengths[start] = 0;
@@ -31,23 +33,23 @@ void findShortestPath(int nVertex, int** matrix, int start, int end, FILE* file)
             }
         }
         used[vertex] = 1;
-        int minLength = 1000000;
+        int minLength = INFINITY;
         for (int i = 0; i < nVertex; i++) {
             if (!used[i] && lengths[i] > -1 && lengths[i] < minLength) {
                 vertex = i;
                 minLength = lengths[i];
             }
         }
-        if (minLength == 1000000)
+        if (minLength == INFINITY)
             break;
     }
-    if (lengths[end] == 1000000)
+    if (lengths[end] == INFINITY)
         fprintf(file, "There is no path from vertex %d to vertex %d.", start, end);
     else {
         int shortestPath = lengths[end];
         int number = 0;
         int* path = calloc(nVertex, sizeof(int));
-        while (end != -1) {
+        while (end != NONE_PARENT) {
             path[number] = end;
             end = parents[end];
             number += 1;
